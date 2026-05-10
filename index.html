@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- Content Security Policy - يمنع XSS -->
 <meta http-equiv="Content-Security-Policy" content="
   default-src 'self';
   script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com;
@@ -122,24 +121,53 @@ DASHBOARDS
 .smenu li{margin-bottom:2px}
 .sico{width:16px;height:16px;flex-shrink:0}
 
-/* FEATURED SLIDER */
-.slider-wrap{position:relative;overflow:hidden;border-radius:var(--r2);margin-bottom:28px}
-.slider-track{display:flex;transition:transform .45s var(--ease)}
+/* ══════════════════════════════════════════════
+   🎠 SLIDER — محسّن بالكامل
+══════════════════════════════════════════════ */
+.slider-wrap{
+  position:relative;
+  margin-bottom:36px;
+  border-radius:var(--r2);
+  overflow:hidden;
+  height:300px;
+}
+.slider-viewport{
+  width:100%;
+  height:300px;
+  overflow:hidden;
+  border-radius:var(--r2);
+  position:relative;
+}
+.slider-track{
+  display:flex;
+  height:300px;
+  transition:transform .65s cubic-bezier(.4,0,.2,1);
+  will-change:transform;
+}
 .slide{
-min-width:100%;position:relative;height:280px;
-display:flex;flex-direction:column;justify-content:flex-end;
-padding:28px 32px;border-radius:var(--r2);overflow:hidden;
-cursor:default;flex-shrink:0;
+  min-width:100%;
+  width:100%;
+  height:300px;
+  flex-shrink:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  padding:28px 32px;
+  border-radius:var(--r2);
+  overflow:hidden;
+  position:relative;
 }
 .slide-bg{position:absolute;inset:0;background:linear-gradient(135deg,var(--boys),#55A8FF)}
 .slide-bg.girls{background:linear-gradient(135deg,var(--girls),#A040E0)}
-.slide-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.72) 0%,rgba(0,0,0,.15) 60%,transparent 100%)}
-.slide-orb{position:absolute;border-radius:50%;background:rgba(255,255,255,.07);animation:orbFloat 6s ease-in-out infinite}
-.slide-orb-1{width:200px;height:200px;top:-60px;right:-40px}
-.slide-orb-2{width:110px;height:110px;bottom:-20px;right:30%;animation-delay:2s}
+.slide-bg.both{background:linear-gradient(135deg,#1A3A6B,#5B4FFF)}
+.slide-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.78) 0%,rgba(0,0,0,.2) 55%,transparent 100%)}
+.slide-orb{position:absolute;border-radius:50%;background:rgba(255,255,255,.07);animation:orbFloat 6s ease-in-out infinite;pointer-events:none}
+.slide-orb-1{width:220px;height:220px;top:-70px;right:-50px}
+.slide-orb-2{width:120px;height:120px;bottom:-20px;right:28%;animation-delay:2s}
+@keyframes orbFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-18px) scale(1.04)}}
 .slide-content{position:relative;z-index:2;color:#fff;display:flex;flex-direction:column;gap:8px}
-.slide-cat{font-size:.7rem;font-weight:700;opacity:.8;letter-spacing:.3px;text-transform:uppercase;display:flex;align-items:center;gap:6px}
-.slide-cat-dot{width:5px;height:5px;border-radius:50%;background:#fff;opacity:.7}
+.slide-cat{font-size:.7rem;font-weight:700;opacity:.8;letter-spacing:.3px;text-transform:uppercase;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.slide-cat-dot{width:5px;height:5px;border-radius:50%;background:#fff;opacity:.7;flex-shrink:0}
 .slide-title{font-size:1.3rem;font-weight:900;line-height:1.25}
 .slide-desc{font-size:.82rem;opacity:.8;line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;max-width:520px}
 .slide-footer{display:flex;align-items:center;justify-content:space-between;margin-top:4px;flex-wrap:wrap;gap:10px}
@@ -150,15 +178,45 @@ font-family:'Tajawal',sans-serif;font-size:.82rem;font-weight:700;
 background:rgba(255,255,255,.9);color:var(--boys);
 transition:all .18s;flex-shrink:0;
 }
-.slide-btn:hover{background:#fff;transform:translateY(-1px)}
+.slide-btn:hover{background:#fff;transform:translateY(-1px);box-shadow:0 4px 14px rgba(0,0,0,.2)}
+.slide-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
 .slide-btn.girls-btn{color:var(--girls)}
-.slider-dots{display:flex;justify-content:center;gap:6px;margin-top:10px}
-.sdot-btn{width:7px;height:7px;border-radius:50%;background:#C8C8DC;border:none;cursor:pointer;padding:0;transition:all .25s}
-.sdot-btn.active{background:var(--boys);width:20px;border-radius:4px}
+.slide-btn.both-btn{color:#5B4FFF}
+
+/* نقاط الـ Slider */
+.slider-dots{display:flex;justify-content:center;gap:6px;margin-top:12px}
+.sdot-btn{
+  width:7px;height:7px;border-radius:50%;
+  background:#C8C8DC;border:none;cursor:pointer;padding:0;
+  transition:all .28s var(--ease);
+  flex-shrink:0;
+}
+.sdot-btn.active{background:var(--boys);width:22px;border-radius:4px}
 .sdot-btn.girls-dot.active{background:var(--girls)}
-.slider-arrow{position:absolute;top:50%;transform:translateY(-50%);width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.18);backdrop-filter:blur(8px);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10;color:#fff;transition:background .2s}
-.slider-arrow:hover{background:rgba(255,255,255,.32)}
-.slider-arr-r{left:10px}.slider-arr-l{right:10px}
+.sdot-btn.both-dot.active{background:#5B4FFF}
+
+/* أسهم الـ Slider */
+.slider-arrow{
+  position:absolute;top:50%;transform:translateY(-50%);
+  width:38px;height:38px;border-radius:50%;
+  background:rgba(0,0,0,.28);backdrop-filter:blur(8px);
+  border:1.5px solid rgba(255,255,255,.22);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  z-index:10;color:#fff;transition:all .2s;
+}
+.slider-arrow:hover{background:rgba(0,0,0,.48);border-color:rgba(255,255,255,.4)}
+.slider-arr-r{left:12px}
+.slider-arr-l{right:12px}
+
+/* Slider فارغ */
+.slider-empty{
+  height:300px;background:#fff;border-radius:var(--r2);
+  border:1.5px dashed #DCDCEC;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  color:var(--ink3);gap:10px;margin-bottom:36px;
+}
+.slider-empty span:first-child{font-size:2.5rem}
+.slider-empty span:last-child{font-size:.9rem;font-weight:700}
 
 .sml{display:flex;align-items:center;gap:9px;padding:10px 12px;border-radius:9px;color:var(--ink3);font-size:.86rem;font-weight:600;cursor:pointer;transition:all .15s;border:none;background:transparent;width:100%;text-align:right;font-family:'Tajawal',sans-serif}
 .sml:hover{background:var(--paper2);color:var(--ink)}
@@ -333,39 +391,33 @@ transition:all .18s;flex-shrink:0;
 /* Price field */
 .price-field{display:none;margin-top:10px;background:#FFFBF0;border:1.5px solid #FFE0A0;border-radius:10px;padding:12px 14px}
 .price-field.show{display:block;animation:fadeUp .2s var(--ease)}
-.gender-both-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:5px;font-size:.69rem;font-weight:800;background:linear-gradient(90deg,#E6F2FF,#F3E6FF);color:var(--ink2)}
 .req-star{color:var(--coral);font-size:.75rem;margin-right:2px}
 
-/* Firebase Config Banner */
-.config-banner{background:#FFF8E6;border:1.5px solid #FFD066;border-radius:14px;padding:20px 24px;margin:24px auto;max-width:640px;font-size:.88rem;line-height:1.8}
-.config-banner h3{font-weight:900;color:#7A5800;margin-bottom:8px;font-size:1rem}
-.config-banner code{background:#FFE9A0;padding:2px 8px;border-radius:5px;font-family:monospace;font-size:.82rem}
-
-@media(max-width:860px){
-nav{padding:0 16px}
-#pg-login>div,#pg-register>div{grid-template-columns:1fr}
-#pg-login>div>div:first-child,#pg-register>div>div:first-child{display:none}
-#pg-login>div>div:last-child,#pg-register>div>div:last-child{padding:40px 28px}
-.dash{grid-template-columns:1fr}
-.sidebar{display:none}
-.cstats{grid-template-columns:repeat(2,1fr)}
-.edmeta{grid-template-columns:1fr}
-.frow{grid-template-columns:1fr}
-.dmain{padding:20px 16px}
-.egrid{grid-template-columns:1fr}
-}
-</style>
-<style>
+/* AUTH */
 .auth-panel{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;}
-.auth-left{background:var(--boys);display:flex;flex-direction:column;justify-content:space-between;padding:56px 52px;position:relative;overflow:hidden;border-top-left-radius:28px;border-bottom-left-radius:28px;}
+.auth-left{background:var(--boys);display:flex;flex-direction:column;justify-content:space-between;padding:56px 52px;position:relative;overflow:hidden;}
 .auth-orb{position:absolute;border-radius:50%;background:rgba(255,255,255,.07);animation:orbFloat 7s ease-in-out infinite;}
 .auth-orb-1{width:380px;height:380px;top:-140px;left:-140px;animation-delay:0s}
 .auth-orb-2{width:220px;height:220px;bottom:-80px;right:-60px;animation-delay:2.5s;background:rgba(255,255,255,.05)}
 .auth-orb-3{width:130px;height:130px;top:40%;right:10%;animation-delay:1.2s;background:rgba(255,255,255,.04)}
 .auth-orb-4{width:70px;height:70px;bottom:25%;left:12%;animation-delay:3.8s;background:rgba(255,255,255,.06)}
-@keyframes orbFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-22px) scale(1.04)}}
 .auth-right{display:flex;align-items:center;justify-content:center;padding:56px 52px;background:#fff;overflow-y:auto;}
-@media(max-width:860px){.auth-panel{grid-template-columns:1fr}.auth-left{display:none}.auth-right{padding:40px 28px}}
+
+@media(max-width:860px){
+  nav{padding:0 16px}
+  .auth-panel{grid-template-columns:1fr}
+  .auth-left{display:none}
+  .auth-right{padding:40px 28px}
+  .dash{grid-template-columns:1fr}
+  .sidebar{display:none}
+  .cstats{grid-template-columns:repeat(2,1fr)}
+  .edmeta{grid-template-columns:1fr}
+  .frow{grid-template-columns:1fr}
+  .dmain{padding:20px 16px}
+  .egrid{grid-template-columns:1fr}
+  .slider-arr-l{right:8px}
+  .slider-arr-r{left:8px}
+}
 </style>
 </head>
 <body>
@@ -376,7 +428,7 @@ nav{padding:0 16px}
   <div style="font-size:.9rem;color:var(--ink3);font-weight:600">جاري الاتصال بقاعدة البيانات...</div>
 </div>
 
-<!-- ████████████████████ NAV ████████████████████ -->
+<!-- NAV -->
 <nav id="nav" style="display:none">
   <div class="logo" onclick="goHome()">
     <div class="logo-mark">
@@ -390,7 +442,7 @@ nav{padding:0 16px}
   <div class="navr" id="navr"></div>
 </nav>
 
-<!-- ████████████████████ LOGIN PAGE ████████████████████ -->
+<!-- LOGIN PAGE -->
 <div id="pg-login" class="page active">
   <div class="auth-panel">
     <div class="auth-left">
@@ -426,7 +478,7 @@ nav{padding:0 16px}
   </div>
 </div>
 
-<!-- ████████████████████ REGISTER PAGE ████████████████████ -->
+<!-- REGISTER PAGE -->
 <div id="pg-register" class="page">
   <div class="auth-panel">
     <div class="auth-left">
@@ -469,7 +521,7 @@ nav{padding:0 16px}
   </div>
 </div>
 
-<!-- ████████████████████ BOYS DASHBOARD ████████████████████ -->
+<!-- BOYS DASHBOARD -->
 <div id="pg-boys" class="page">
   <div class="dash">
     <div class="sidebar">
@@ -489,12 +541,8 @@ nav{padding:0 16px}
     <div class="dmain">
       <div id="bt-myE">
         <div class="sec-h"><div class="sec-t">أبرز <span class="boys-accent">الفعاليات</span></div></div>
-        <div class="slider-wrap" id="bSliderWrap">
-          <div class="slider-track" id="bSliderTrack"></div>
-          <button class="slider-arrow slider-arr-l" onclick="slideMove('boys',-1)"><svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M8 5l5 5-5 5" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></button>
-          <button class="slider-arrow slider-arr-r" onclick="slideMove('boys',1)"><svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M12 5l-5 5 5 5" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></button>
-        </div>
-        <div class="slider-dots" id="bSliderDots"></div>
+        <!-- الـ Slider يُبنى ديناميكياً -->
+        <div id="bSliderContainer"></div>
         <div class="sec-h" style="margin-top:24px"><div class="sec-t">فعالياتي <span class="boys-accent">المسجلة</span></div></div>
         <div class="egrid" id="bMyGrid"></div>
       </div>
@@ -518,7 +566,7 @@ nav{padding:0 16px}
   </div>
 </div>
 
-<!-- ████████████████████ GIRLS DASHBOARD ████████████████████ -->
+<!-- GIRLS DASHBOARD -->
 <div id="pg-girls" class="page">
   <div class="dash">
     <div class="sidebar">
@@ -538,12 +586,7 @@ nav{padding:0 16px}
     <div class="dmain">
       <div id="gt-myE">
         <div class="sec-h"><div class="sec-t">أبرز <span class="girls-accent">الفعاليات</span></div></div>
-        <div class="slider-wrap" id="gSliderWrap">
-          <div class="slider-track" id="gSliderTrack"></div>
-          <button class="slider-arrow slider-arr-l" onclick="slideMove('girls',-1)"><svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M8 5l5 5-5 5" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></button>
-          <button class="slider-arrow slider-arr-r" onclick="slideMove('girls',1)"><svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M12 5l-5 5 5 5" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></button>
-        </div>
-        <div class="slider-dots" id="gSliderDots"></div>
+        <div id="gSliderContainer"></div>
         <div class="sec-h" style="margin-top:24px"><div class="sec-t">فعالياتي <span class="girls-accent">المسجلة</span></div></div>
         <div class="egrid" id="gMyGrid"></div>
       </div>
@@ -567,7 +610,7 @@ nav{padding:0 16px}
   </div>
 </div>
 
-<!-- ████████████████████ ADMIN DASHBOARD ████████████████████ -->
+<!-- ADMIN DASHBOARD -->
 <div id="pg-admin" class="page">
   <div class="dash">
     <div class="sidebar">
@@ -582,7 +625,11 @@ nav{padding:0 16px}
         <li><button class="sml" onclick="sATab('cats')"><svg class="sico" viewBox="0 0 20 20"><path d="M3 5h14M3 10h14M3 15h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg> التصنيفات</button></li>
         <li><button class="sml" onclick="sATab('regs')"><svg class="sico" viewBox="0 0 20 20"><path d="M13 7a3 3 0 11-6 0 3 3 0 016 0zM4 17c0-3 2.7-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/></svg> التسجيلات</button></li>
         <li><button class="sml" onclick="sATab('users')"><svg class="sico" viewBox="0 0 20 20"><circle cx="7" cy="7" r="3" stroke="currentColor" stroke-width="1.6" fill="none"/><circle cx="14" cy="7" r="2" stroke="currentColor" stroke-width="1.6" fill="none"/><path d="M1 17c0-2.8 2.7-5 6-5s6 2.2 6 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/><path d="M14 12c1.7.4 3 1.8 3 3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/></svg> إدارة المستخدمين</button></li>
-        <li><button class="sml" onclick="sATab('notes')"><svg class="sico" viewBox="0 0 20 20"><path d="M5 3h10a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z" stroke="currentColor" stroke-width="1.6" fill="none"/><path d="M7 7h6M7 10h6M7 13h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg> الملاحظات <span id="notesAdminBadge" style="display:none;background:var(--coral);color:#fff;border-radius:50%;width:18px;height:18px;font-size:.68rem;font-weight:800;display:inline-flex;align-items:center;justify-content:center;margin-right:auto">0</span></button></li>
+        <li><button class="sml" onclick="sATab('notes')">
+          <svg class="sico" viewBox="0 0 20 20"><path d="M5 3h10a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z" stroke="currentColor" stroke-width="1.6" fill="none"/><path d="M7 7h6M7 10h6M7 13h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          الملاحظات
+          <span id="notesAdminBadge" style="display:none;background:var(--coral);color:#fff;border-radius:50%;width:18px;height:18px;font-size:.68rem;font-weight:800;margin-right:auto;align-items:center;justify-content:center">0</span>
+        </button></li>
         <li><button class="sml" onclick="logout()"><svg class="sico" viewBox="0 0 20 20"><path d="M13 3h2a2 2 0 012 2v10a2 2 0 01-2 2h-2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/><path d="M9 13l4-3-4-3M3 10h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/></svg> تسجيل الخروج</button></li>
       </ul>
     </div>
@@ -768,30 +815,23 @@ nav{padding:0 16px}
   🔥 FIREBASE SDK
 ══════════════════════════════════════════════ -->
 <script type="module">
-// ─────────────────────────────────────────────────────────
-//  ⚙️  ضع إعدادات مشروعك هنا من Firebase Console
-//  https://console.firebase.google.com → Project Settings → Your apps
-// ─────────────────────────────────────────────────────────
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
-  onAuthStateChanged,
-  updatePassword,
-  EmailAuthProvider,
-  reauthenticateWithCredential
+  onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import {
   getFirestore,
   doc, getDoc, getDocs, setDoc, addDoc, updateDoc, deleteDoc,
   collection, query, where, orderBy, onSnapshot,
-  serverTimestamp, Timestamp, writeBatch, limit, increment
+  serverTimestamp, writeBatch, limit, increment
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 // ──────────────────────────────────────────────────────────
-//  🔧 إعدادات Firebase — استبدل هذه القيم بقيم مشروعك
+//  🔧 إعدادات Firebase
 // ──────────────────────────────────────────────────────────
 const firebaseConfig = {
   apiKey: "AIzaSyA5yxzHBoIAKmN_RGpY1ox_5UmJEC3HkL8",
@@ -802,9 +842,6 @@ const firebaseConfig = {
   appId: "1:857961611232:web:7ff1518e36d3b7c43a3585"
 };
 
-// ══════════════════════════════════════════════
-//  تهيئة Firebase
-// ══════════════════════════════════════════════
 const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
@@ -812,24 +849,33 @@ const db   = getFirestore(app);
 // ══════════════════════════════════════════════
 //  متغيرات عامة
 // ══════════════════════════════════════════════
-let currentUser     = null;  // Firebase Auth user
-let currentProfile  = null;  // Firestore user document
-let allEvents       = [];    // نسخة محلية للفعاليات
+let currentUser     = null;
+let currentProfile  = null;
+let allEvents       = [];
 let allCategories   = [];
-let myRegistrations = new Set(); // IDs الفعاليات المسجلة
+let myRegistrations = new Set();
 let unsubEvents     = null;
 let unsubNotes      = null;
 let bQ = '', gQ = '';
 let pendingRegEvId  = null, prevPage = null;
 let currentNoteFilter = 'all';
+let allNotes        = [];
+
+// ══════════════════════════════════════════════
+//  حالة الـ Slider — مُصلَحة بالكامل
+// ══════════════════════════════════════════════
+const sliderState = {
+  boys:  { idx: 0, total: 0, timer: null },
+  girls: { idx: 0, total: 0, timer: null }
+};
 
 // ══════════════════════════════════════════════
 //  دوال DOM مساعدة
 // ══════════════════════════════════════════════
 const $ = id => document.getElementById(id);
+
 function esc(str){
-  // يمنع XSS — يُهرّب HTML دائماً قبل الإدراج
-  if(str==null) return '';
+  if(str == null) return '';
   return String(str)
     .replace(/&/g,'&amp;')
     .replace(/</g,'&lt;')
@@ -837,33 +883,37 @@ function esc(str){
     .replace(/"/g,'&quot;')
     .replace(/'/g,'&#39;');
 }
+
 function showPg(n){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   $('pg-'+n).classList.add('active');
-  window.scrollTo({top:0,behavior:'smooth'});
+  window.scrollTo({top:0, behavior:'smooth'});
 }
-function openM(id){$(id).classList.add('open')}
-function closeM(id){$(id).classList.remove('open')}
-function toast(msg,type='info'){
-  const d=document.createElement('div');
-  d.className='toast t-'+type;
-  // النص النظيف فقط — لا innerHTML هنا
-  const icon=document.createElement('span');
-  icon.style.fontWeight='900';
-  icon.textContent=type==='ok'?'✓':type==='err'?'✕':'›';
-  const txt=document.createElement('span');
-  txt.textContent=msg;
-  d.append(icon,txt);
+function openM(id){ $(id).classList.add('open'); }
+function closeM(id){ $(id).classList.remove('open'); }
+
+function toast(msg, type='info'){
+  const d = document.createElement('div');
+  d.className = 'toast t-'+type;
+  const icon = document.createElement('span');
+  icon.style.fontWeight = '900';
+  icon.textContent = type==='ok' ? '✓' : type==='err' ? '✕' : '›';
+  const txt = document.createElement('span');
+  txt.textContent = msg;
+  d.append(icon, txt);
   $('tWrap').appendChild(d);
-  setTimeout(()=>d.remove(),3200);
+  setTimeout(() => d.remove(), 3200);
 }
-window.addEventListener('scroll',()=>{if(currentUser)$('nav').classList.toggle('scrolled',window.scrollY>10)});
-window.addEventListener('click',e=>{
-  document.querySelectorAll('.ov').forEach(o=>{if(e.target===o)o.classList.remove('open')});
+
+window.addEventListener('scroll', () => {
+  if(currentUser) $('nav').classList.toggle('scrolled', window.scrollY > 10);
+});
+window.addEventListener('click', e => {
+  document.querySelectorAll('.ov').forEach(o => { if(e.target === o) o.classList.remove('open'); });
 });
 
 // ══════════════════════════════════════════════
-//  🔐 AUTH STATE — المراقب الرئيسي
+//  🔐 AUTH STATE
 // ══════════════════════════════════════════════
 onAuthStateChanged(auth, async (firebaseUser) => {
   $('firebaseLoading').style.display = 'none';
@@ -872,26 +922,27 @@ onAuthStateChanged(auth, async (firebaseUser) => {
     currentProfile = null;
     updateNav();
     showPg('login');
-    if(unsubEvents){unsubEvents();unsubEvents=null;}
-    if(unsubNotes){unsubNotes();unsubNotes=null;}
+    if(unsubEvents){ unsubEvents(); unsubEvents = null; }
+    if(unsubNotes){ unsubNotes(); unsubNotes = null; }
+    // إيقاف جميع Slider timers
+    ['boys','girls'].forEach(g => {
+      if(sliderState[g].timer){ clearInterval(sliderState[g].timer); sliderState[g].timer = null; }
+    });
     return;
   }
-
-  // جلب البيانات من Firestore
   try{
     const snap = await getDoc(doc(db,'users',firebaseUser.uid));
     if(!snap.exists()){
-      // مستخدم Firebase بدون Firestore profile → تسجيل خروج
       await signOut(auth);
       toast('خطأ في البيانات. تواصل مع الإدارة.','err');
       return;
     }
     currentUser    = firebaseUser;
-    currentProfile = {id:firebaseUser.uid, ...snap.data()};
+    currentProfile = {id: firebaseUser.uid, ...snap.data()};
     updateNav();
     loadEvents();
     loadCategories();
-    if(currentProfile.role==='admin'||currentProfile.role==='coordinator') listenNotes();
+    if(currentProfile.role==='admin' || currentProfile.role==='coordinator') listenNotes();
     routeAfterLogin();
   }catch(e){
     console.error(e);
@@ -903,43 +954,36 @@ onAuthStateChanged(auth, async (firebaseUser) => {
 //  🔐 تسجيل الدخول
 // ══════════════════════════════════════════════
 async function doLogin(){
-  const email=$('lE').value.trim().toLowerCase();
-  const pass=$('lP').value;
-  $('lErr').style.display='none';
-
-  // التحقق الأساسي
-  if(!email||!pass){toast('يرجى ملء جميع الحقول','err');return;}
-  if(!isValidEmail(email)){toast('بريد إلكتروني غير صالح','err');return;}
-
-  const btn=$('loginBtn');
-  btn.disabled=true; btn.textContent='جاري الدخول...';
+  const email = $('lE').value.trim().toLowerCase();
+  const pass  = $('lP').value;
+  $('lErr').style.display = 'none';
+  if(!email || !pass){ toast('يرجى ملء جميع الحقول','err'); return; }
+  if(!isValidEmail(email)){ toast('بريد إلكتروني غير صالح','err'); return; }
+  const btn = $('loginBtn');
+  btn.disabled = true; btn.textContent = 'جاري الدخول...';
   try{
     const cred = await signInWithEmailAndPassword(auth, email, pass);
-    // التحقق من تطابق الدور مع اختيار المستخدم
     const snap = await getDoc(doc(db,'users',cred.user.uid));
-    if(!snap.exists()){await signOut(auth);throw new Error('no-profile');}
+    if(!snap.exists()){ await signOut(auth); throw new Error('no-profile'); }
     const profile = snap.data();
-    const roleOk = checkRoleMatch(profile);
-    if(!roleOk){
+    if(!checkRoleMatch(profile)){
       await signOut(auth);
-      $('lErr').textContent='الحساب غير مصرح له بهذا القسم.';
-      $('lErr').style.display='block';
+      $('lErr').textContent = 'الحساب غير مصرح له بهذا القسم.';
+      $('lErr').style.display = 'block';
       return;
     }
-    // auth state observer سيكمل الباقي
   }catch(e){
-    $('lErr').style.display='block';
-    $('lErr').textContent='البريد أو كلمة المرور غير صحيحة';
+    $('lErr').style.display = 'block';
+    $('lErr').textContent = 'البريد أو كلمة المرور غير صحيحة';
   }finally{
-    btn.disabled=false; btn.textContent='دخول';
+    btn.disabled = false; btn.textContent = 'دخول';
   }
 }
 
 function checkRoleMatch(profile){
-  // loginRole هو ما اختاره المستخدم في UI
-  if(loginRole==='admin') return profile.role==='admin'||profile.role==='coordinator';
-  if(loginRole==='boys')  return profile.role==='student'&&profile.gender==='boys';
-  if(loginRole==='girls') return profile.role==='student'&&profile.gender==='girls';
+  if(loginRole==='admin')  return profile.role==='admin' || profile.role==='coordinator';
+  if(loginRole==='boys')   return profile.role==='student' && profile.gender==='boys';
+  if(loginRole==='girls')  return profile.role==='student' && profile.gender==='girls';
   return false;
 }
 
@@ -947,46 +991,33 @@ function checkRoleMatch(profile){
 //  📝 إنشاء حساب
 // ══════════════════════════════════════════════
 async function doReg(){
-  const fn  = $('rFN').value.trim();
-  const ln  = $('rLN').value.trim();
-  const email=$('rE').value.trim().toLowerCase();
-  const pass= $('rP').value;
-  $('rEErr').style.display='none';
-  $('rPErr').style.display='none';
-
-  if(!fn||!ln||!email||!pass){toast('يرجى ملء جميع الحقول','err');return;}
-  if(!isValidEmail(email)){toast('بريد إلكتروني غير صالح','err');return;}
-  if(pass.length<8){$('rPErr').style.display='block';return;}
-  // لا يُسمح بالتسجيل كـ admin من الواجهة
-  if(regRole==='admin'){toast('التسجيل كإداري متاح فقط من خلال الإدارة','err');return;}
-
-  // تعقيم المدخلات
+  const fn    = $('rFN').value.trim();
+  const ln    = $('rLN').value.trim();
+  const email = $('rE').value.trim().toLowerCase();
+  const pass  = $('rP').value;
+  $('rEErr').style.display = 'none';
+  $('rPErr').style.display = 'none';
+  if(!fn || !ln || !email || !pass){ toast('يرجى ملء جميع الحقول','err'); return; }
+  if(!isValidEmail(email)){ toast('بريد إلكتروني غير صالح','err'); return; }
+  if(pass.length < 8){ $('rPErr').style.display = 'block'; return; }
+  if(regRole === 'admin'){ toast('التسجيل كإداري متاح فقط من خلال الإدارة','err'); return; }
   const cleanFn = sanitizeText(fn);
   const cleanLn = sanitizeText(ln);
-  if(!cleanFn||!cleanLn){toast('الاسم يحتوي على محارف غير مسموح بها','err');return;}
-
-  const btn=$('regBtn');
-  btn.disabled=true; btn.textContent='جاري الإنشاء...';
+  if(!cleanFn || !cleanLn){ toast('الاسم يحتوي على محارف غير مسموح بها','err'); return; }
+  const btn = $('regBtn');
+  btn.disabled = true; btn.textContent = 'جاري الإنشاء...';
   try{
     const cred = await createUserWithEmailAndPassword(auth, email, pass);
-    // حفظ البيانات في Firestore
     await setDoc(doc(db,'users',cred.user.uid),{
-      fn: cleanFn,
-      ln: cleanLn,
-      email,
-      role:'student',
-      gender: regRole, // 'boys' | 'girls'
+      fn: cleanFn, ln: cleanLn, email,
+      role: 'student', gender: regRole,
       createdAt: serverTimestamp()
     });
     toast('تم إنشاء حسابك!','ok');
-    // auth state observer سيكمل
   }catch(e){
-    if(e.code==='auth/email-already-in-use'){
-      $('rEErr').style.display='block';
-    } else {
-      toast('خطأ: '+e.message,'err');
-    }
-    btn.disabled=false; btn.textContent='إنشاء الحساب';
+    if(e.code==='auth/email-already-in-use'){ $('rEErr').style.display = 'block'; }
+    else { toast('خطأ: '+e.message,'err'); }
+    btn.disabled = false; btn.textContent = 'إنشاء الحساب';
   }
 }
 
@@ -994,11 +1025,15 @@ async function doReg(){
 //  🚪 تسجيل الخروج
 // ══════════════════════════════════════════════
 async function logout(){
+  // إيقاف timers قبل الخروج
+  ['boys','girls'].forEach(g => {
+    if(sliderState[g].timer){ clearInterval(sliderState[g].timer); sliderState[g].timer = null; }
+  });
   try{
     await signOut(auth);
-    $('lE').value=''; $('lP').value='';
+    $('lE').value = ''; $('lP').value = '';
     toast('تم تسجيل الخروج');
-  }catch(e){toast('خطأ','err');}
+  }catch(e){ toast('خطأ','err'); }
 }
 
 // ══════════════════════════════════════════════
@@ -1009,70 +1044,62 @@ function loadEvents(){
   unsubEvents = onSnapshot(
     query(collection(db,'events'), orderBy('date','asc')),
     async (snap) => {
-      allEvents = snap.docs.map(d=>({id:d.id,...d.data()}));
+      allEvents = snap.docs.map(d => ({id: d.id, ...d.data()}));
       await loadMyRegistrations();
       refreshCurrentView();
     },
-    err=>console.error('events listener',err)
+    err => console.error('events listener', err)
   );
 }
 
 async function loadMyRegistrations(){
   if(!currentUser) return;
-  const q = query(
-    collection(db,'registrations'),
-    where('userId','==',currentUser.uid)
-  );
+  const q = query(collection(db,'registrations'), where('userId','==',currentUser.uid));
   const snap = await getDocs(q);
-  myRegistrations = new Set(snap.docs.map(d=>d.data().eventId));
+  myRegistrations = new Set(snap.docs.map(d => d.data().eventId));
 }
 
 async function loadCategories(){
   const snap = await getDocs(collection(db,'categories'));
-  allCategories = snap.docs.map(d=>d.data().name).filter(Boolean);
+  allCategories = snap.docs.map(d => d.data().name).filter(Boolean);
   if(!allCategories.length){
     allCategories = ['برمجة','ذكاء اصطناعي','تصميم','أمن معلومات','ريادة أعمال','شبكات','روبوتيك'];
   }
 }
 
-// مراقب الملاحظات للأدمن
 function listenNotes(){
   if(unsubNotes) unsubNotes();
   unsubNotes = onSnapshot(
     query(collection(db,'notes'), orderBy('createdAt','desc')),
-    snap=>{
-      allNotes = snap.docs.map(d=>({id:d.id,...d.data()}));
+    snap => {
+      allNotes = snap.docs.map(d => ({id: d.id, ...d.data()}));
       updateNotesBadge();
-      if($('notesInbox')&&$('notesInbox').parentElement&&$('at-notes').style.display!=='none'){
-        renderNotesInbox();
-      }
+      if($('at-notes') && $('at-notes').style.display !== 'none') renderNotesInbox();
     }
   );
 }
 
-let allNotes = [];
-
 // ══════════════════════════════════════════════
-//  🔄 التوجيه بعد الدخول
+//  🔄 التوجيه
 // ══════════════════════════════════════════════
 function routeAfterLogin(){
   const p = currentProfile;
-  if(p.role==='admin'||p.role==='coordinator'){showPg('admin');rAdminD();}
-  else if(p.gender==='boys'){showPg('boys');rBoysD();}
-  else{showPg('girls');rGirlsD();}
+  if(p.role==='admin' || p.role==='coordinator'){ showPg('admin'); rAdminD(); }
+  else if(p.gender==='boys'){ showPg('boys'); rBoysD(); }
+  else { showPg('girls'); rGirlsD(); }
   toast(`أهلاً ${esc(p.fn)}!`,'ok');
 }
 
 function refreshCurrentView(){
   if(!currentProfile) return;
-  const p=currentProfile;
-  if(p.role==='admin'||p.role==='coordinator'){renderAdminTables();rAdminStats();}
-  else if(p.gender==='boys'){renderBMyEv();renderBAll();buildSlider('boys');}
-  else{renderGMyEv();renderGAll();buildSlider('girls');}
+  const p = currentProfile;
+  if(p.role==='admin' || p.role==='coordinator'){ renderAdminTables(); rAdminStats(); }
+  else if(p.gender==='boys'){ renderBMyEv(); renderBAll(); buildSlider('boys'); }
+  else { renderGMyEv(); renderGAll(); buildSlider('girls'); }
 }
 
 function goHome(){
-  if(!currentProfile){showPg('login');return;}
+  if(!currentProfile){ showPg('login'); return; }
   routeAfterLogin();
 }
 
@@ -1080,120 +1107,205 @@ function goHome(){
 //  🧭 NAV
 // ══════════════════════════════════════════════
 function updateNav(){
-  const navEl=$('nav'), navr=$('navr');
-  if(!currentProfile){navEl.style.display='none';navr.innerHTML='';return;}
-  navEl.style.display='flex';
-  const p=currentProfile;
-  const g=p.gender||'admin';
-  const colors={boys:'var(--boys)',girls:'var(--girls)',admin:'#6B4FFF'};
-  const labels={boys:'قسم البنين',girls:'قسم البنات',admin:'إداري'};
-  navr.innerHTML=`<span style="font-size:.82rem;color:var(--ink3);font-weight:600">${esc(p.fn)} — ${esc(labels[g]||'إداري')}</span>
+  const navEl = $('nav'), navr = $('navr');
+  if(!currentProfile){ navEl.style.display='none'; navr.innerHTML=''; return; }
+  navEl.style.display = 'flex';
+  const p = currentProfile;
+  const g = p.gender || 'admin';
+  const colors = {boys:'var(--boys)', girls:'var(--girls)', admin:'#6B4FFF'};
+  const labels = {boys:'قسم البنين', girls:'قسم البنات', admin:'إداري'};
+  navr.innerHTML = `<span style="font-size:.82rem;color:var(--ink3);font-weight:600">${esc(p.fn)} — ${esc(labels[g]||'إداري')}</span>
   <div style="width:33px;height:33px;border-radius:50%;background:${colors[g]||'#6B4FFF'};display:flex;align-items:center;justify-content:center;font-weight:900;color:#fff;cursor:pointer;font-size:.88rem" onclick="goHome()">${esc(p.fn.charAt(0))}</div>`;
 }
 
 // ══════════════════════════════════════════════
 //  🎯 ROLE SELECTOR
 // ══════════════════════════════════════════════
-let loginRole='boys', regRole='boys';
-function pickRole(role,el,context){
+let loginRole = 'boys', regRole = 'boys';
+function pickRole(role, el, context){
   if(context==='login'){
-    loginRole=role;
-    document.querySelectorAll('#loginRolePick .rpick').forEach(r=>r.classList.remove('active'));
-  }else{
-    regRole=role;
-    document.querySelectorAll('#regRolePick .rpick').forEach(r=>r.classList.remove('active'));
+    loginRole = role;
+    document.querySelectorAll('#loginRolePick .rpick').forEach(r => r.classList.remove('active'));
+  } else {
+    regRole = role;
+    document.querySelectorAll('#regRolePick .rpick').forEach(r => r.classList.remove('active'));
   }
   el.classList.add('active');
-  const btnId=context==='login'?'loginBtn':'regBtn';
-  const btn=$(btnId);
-  btn.style.background=''; btn.style.boxShadow='';
-  btn.className='btn btn-p';
-  if(role==='girls'){btn.className='btn btn-girls';}
-  else if(role==='admin'){btn.style.background='#6B4FFF';btn.style.boxShadow='0 3px 12px rgba(107,79,255,.25)';}
+  const btnId = context==='login' ? 'loginBtn' : 'regBtn';
+  const btn = $(btnId);
+  btn.className = 'btn btn-p';
+  btn.style.background = '';
+  btn.style.boxShadow = '';
+  if(role==='girls'){ btn.className = 'btn btn-girls'; }
+  else if(role==='admin'){ btn.style.background='#6B4FFF'; btn.style.boxShadow='0 3px 12px rgba(107,79,255,.25)'; }
 }
 
 // ══════════════════════════════════════════════
-//  🎠 SLIDER
+//  🎠 SLIDER — مُعاد بناؤه بالكامل
+//  الإصلاحات:
+//  1. يعمل بـ flexbox بدلاً من position:absolute
+//  2. يُبنى داخل container واحد مع الأسهم والنقاط
+//  3. يتعامل مع حالة عدم وجود فعاليات بشكل أنيق
+//  4. timer يُوقَف عند مغادرة الصفحة
+//  5. لا يتعارض الـ idx مع total عند إعادة البناء
 // ══════════════════════════════════════════════
-const sliderState={boys:{idx:0,total:0,timer:null},girls:{idx:0,total:0,timer:null}};
-function buildSlider(g){
-  const evs=allEvents.filter(e=>e.gender===g||e.gender==='both').slice(0,5);
-  const track=$(`${g}SliderTrack`),dotsEl=$(`${g}SliderDots`),wrap=$(`${g}SliderWrap`);
-  if(!track||!evs.length){if(wrap)wrap.style.display='none';return;}
-  if(wrap)wrap.style.display='block';
-  const isG=g==='girls';
-  sliderState[g].total=evs.length; sliderState[g].idx=0;
-  track.innerHTML=evs.map(ev=>{
-    const regCount=ev.regCount||0;
-    const isFull=ev.seats>0&&regCount>=ev.seats;
-    const seatsLabel=ev.seats>0?(isFull?'اكتملت المقاعد':`${ev.seats-regCount} مقعد متاح`):'مقاعد غير محدودة';
-    const btnLabel=ev.rr?(isFull?'اكتمل التسجيل':'سجّل الآن'):'انضم للفعالية';
-    const isBoth=ev.gender==='both';
-    return `<div class="slide">
-      <div class="slide-bg${isG&&!isBoth?' girls':''}"></div>
-      <div class="slide-orb slide-orb-1"></div><div class="slide-orb slide-orb-2"></div>
+function buildSlider(gender){
+  const containerId = gender==='boys' ? 'bSliderContainer' : 'gSliderContainer';
+  const container = $(containerId);
+  if(!container) return;
+
+  // إيقاف timer قديم
+  if(sliderState[gender].timer){
+    clearInterval(sliderState[gender].timer);
+    sliderState[gender].timer = null;
+  }
+
+  // تصفية الفعاليات
+  const evs = allEvents
+    .filter(e => e.gender === gender || e.gender === 'both')
+    .slice(0, 6);
+
+  // حالة لا توجد فعاليات
+  if(!evs.length){
+    container.innerHTML = `
+      <div class="slider-empty" style="margin-bottom:36px">
+        <span>📅</span>
+        <span>لا توجد فعاليات متاحة حالياً</span>
+        <span style="font-size:.78rem;color:var(--ink3);font-weight:500;margin-top:-4px">ترقّب الفعاليات القادمة!</span>
+      </div>`;
+    return;
+  }
+
+  const isGirls = (gender === 'girls');
+  sliderState[gender].total = evs.length;
+  sliderState[gender].idx   = 0;
+
+  // بناء HTML
+  const slidesHtml = evs.map((ev, i) => {
+    const regCount = ev.regCount || 0;
+    const isFull   = ev.seats > 0 && regCount >= ev.seats;
+    const isBoth   = ev.gender === 'both';
+    const bgClass  = isBoth ? 'both' : (isGirls ? 'girls' : '');
+    const btnClass = isBoth ? 'both-btn' : (isGirls ? 'girls-btn' : '');
+    const seatsLabel = ev.seats > 0
+      ? (isFull ? 'اكتملت المقاعد' : `${ev.seats - regCount} مقعد متاح`)
+      : 'مقاعد غير محدودة';
+    const regLabel = ev.rr ? (isFull ? 'اكتمل التسجيل' : 'سجّل الآن') : 'انضم للفعالية';
+
+    return `<div class="slide" aria-label="شريحة ${i+1} من ${evs.length}">
+      <div class="slide-bg ${esc(bgClass)}"></div>
+      <div class="slide-orb slide-orb-1"></div>
+      <div class="slide-orb slide-orb-2"></div>
       <div class="slide-overlay"></div>
       <div class="slide-content">
-        <div class="slide-cat"><span class="slide-cat-dot"></span>${esc(ev.cat)}${isBoth?'<span style="background:rgba(255,255,255,.2);border-radius:4px;padding:1px 7px;font-size:.65rem;font-weight:800;margin-right:4px">بنين + بنات</span>':''}</div>
+        <div class="slide-cat">
+          <span class="slide-cat-dot"></span>
+          <span>${esc(ev.cat)}</span>
+          ${isBoth ? '<span style="background:rgba(255,255,255,.22);border-radius:4px;padding:1px 8px;font-size:.64rem;font-weight:800">بنين + بنات</span>' : ''}
+        </div>
         <div class="slide-title">${esc(ev.title)}</div>
         <div class="slide-desc">${esc(ev.desc)}</div>
         <div class="slide-footer">
           <div class="slide-meta">
             <span>${esc(fmtD(ev.date))} · ${esc(ev.time)}</span>
-            <span>${esc(ev.loc||'أون لاين')}</span>
+            <span>${esc(ev.loc || 'أون لاين')}</span>
             <span>${esc(seatsLabel)}</span>
-            ${!ev.free?`<span>${esc(String(ev.price))} ريال</span>`:''}
+            ${!ev.free ? `<span>${esc(String(ev.price))} ريال</span>` : ''}
           </div>
-          <button class="slide-btn${isG&&!isBoth?' girls-btn':''}" data-evid="${esc(ev.id)}" ${isFull?'style="opacity:.6;cursor:not-allowed"':''}>${esc(btnLabel)} →</button>
+          <button class="slide-btn ${esc(btnClass)}"
+            data-evid="${esc(ev.id)}"
+            ${isFull ? 'disabled' : ''}>
+            ${esc(regLabel)} →
+          </button>
         </div>
       </div>
     </div>`;
   }).join('');
-  // إضافة event listener بدلاً من onclick inline
-  track.querySelectorAll('.slide-btn[data-evid]').forEach(btn=>{
-    btn.addEventListener('click',()=>showDet(btn.dataset.evid));
+
+  const dotsHtml = evs.map((_, i) => {
+    const dotClass = isGirls ? 'girls-dot' : '';
+    return `<button class="sdot-btn ${dotClass} ${i===0?'active':''}" data-idx="${i}" aria-label="انتقل إلى الشريحة ${i+1}"></button>`;
+  }).join('');
+
+  // إدراج HTML الكامل للـ Slider
+  container.innerHTML = `
+    <div class="slider-wrap" style="margin-bottom:8px">
+      <div class="slider-viewport">
+        <div class="slider-track" id="slTrack_${gender}">${slidesHtml}</div>
+      </div>
+      <button class="slider-arrow slider-arr-l" id="slArrL_${gender}" aria-label="الشريحة السابقة">
+        <svg width="15" height="15" viewBox="0 0 20 20" fill="none"><path d="M8 5l5 5-5 5" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="slider-arrow slider-arr-r" id="slArrR_${gender}" aria-label="الشريحة التالية">
+        <svg width="15" height="15" viewBox="0 0 20 20" fill="none"><path d="M12 5l-5 5 5 5" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+    <div class="slider-dots" id="slDots_${gender}" style="margin-bottom:30px">${dotsHtml}</div>`;
+
+  // ربط أحداث الأسهم
+  $(`slArrL_${gender}`).addEventListener('click', () => slideTo(gender, (sliderState[gender].idx + 1) % sliderState[gender].total));
+  $(`slArrR_${gender}`).addEventListener('click', () => slideTo(gender, (sliderState[gender].idx - 1 + sliderState[gender].total) % sliderState[gender].total));
+
+  // ربط النقاط
+  $(`slDots_${gender}`).querySelectorAll('.sdot-btn').forEach(btn => {
+    btn.addEventListener('click', () => slideTo(gender, parseInt(btn.dataset.idx)));
   });
-  dotsEl.innerHTML=evs.map((_,i)=>`<button class="sdot-btn${isG?' girls-dot':''}${i===0?' active':''}" data-idx="${i}" data-g="${g}"></button>`).join('');
-  dotsEl.querySelectorAll('.sdot-btn').forEach(b=>{
-    b.addEventListener('click',()=>slideTo(b.dataset.g,parseInt(b.dataset.idx)));
+
+  // ربط أزرار "سجّل الآن"
+  $(`slTrack_${gender}`).querySelectorAll('.slide-btn[data-evid]').forEach(btn => {
+    btn.addEventListener('click', () => showDet(btn.dataset.evid));
   });
-  if(sliderState[g].timer)clearInterval(sliderState[g].timer);
-  sliderState[g].timer=setInterval(()=>slideMove(g,1),5000);
+
+  // تشغيل Auto-play
+  sliderState[gender].timer = setInterval(() => {
+    const s = sliderState[gender];
+    slideTo(gender, (s.idx + 1) % s.total);
+  }, 5000);
 }
-function slideTo(g,idx){
-  sliderState[g].idx=idx;
-  $(`${g}SliderTrack`).style.transform=`translateX(${idx*-100}%)`;
-  document.querySelectorAll(`#${g}SliderDots .sdot-btn`).forEach((d,i)=>d.classList.toggle('active',i===idx));
-}
-function slideMove(g,dir){
-  const s=sliderState[g]; const total=s.total||1;
-  slideTo(g,(s.idx+dir+total)%total);
+
+// انتقال آمن بين الشرائح
+function slideTo(gender, idx){
+  const s = sliderState[gender];
+  const total = s.total;
+  if(total === 0) return;
+  // تأكد من أن الـ idx ضمن الحدود
+  idx = ((idx % total) + total) % total;
+  s.idx = idx;
+
+  const track = $(`slTrack_${gender}`);
+  if(track) track.style.transform = `translateX(${idx * -100}%)`;
+
+  const dotsWrap = $(`slDots_${gender}`);
+  if(dotsWrap){
+    dotsWrap.querySelectorAll('.sdot-btn').forEach((d, i) => d.classList.toggle('active', i === idx));
+  }
 }
 
 // ══════════════════════════════════════════════
-//  📋 CARD HTML — مع esc() لكل قيمة
+//  📋 بطاقة الفعالية
 // ══════════════════════════════════════════════
 function getSt(ev){
-  const regCount=ev.regCount||0;
-  if(ev.seats>0&&regCount>=ev.seats)return{lbl:'مكتملة',ec:'eb-full',tc:'tag-f'};
-  if(!ev.rr)return{lbl:'بدون تسجيل',ec:'eb-nreg',tc:'tag-o'};
-  return{lbl:'مفتوح',ec:'eb-open',tc:'tag-o'};
+  const regCount = ev.regCount || 0;
+  if(ev.seats > 0 && regCount >= ev.seats) return {lbl:'مكتملة', ec:'eb-full', tc:'tag-f'};
+  if(!ev.rr) return {lbl:'بدون تسجيل', ec:'eb-nreg', tc:'tag-o'};
+  return {lbl:'مفتوح', ec:'eb-open', tc:'tag-o'};
 }
-function genderLabel(g){return g==='both'?'كلا القسمين':g==='girls'?'قسم البنات':'قسم البنين'}
-function genderClass(g){return g==='both'?'both':g}
+function genderLabel(g){ return g==='both'?'كلا القسمين':g==='girls'?'قسم البنات':'قسم البنين'; }
+function genderClass(g){ return g==='both'?'both':g; }
 
 function cardH(ev, extraHtml=''){
-  const g=ev.gender; const gc=genderClass(g);
-  const st=getSt(ev);
-  const regCount=ev.regCount||0;
-  const pct=ev.seats>0?Math.min(100,Math.round(regCount/ev.seats*100)):0;
-  const full=ev.seats>0&&regCount>=ev.seats;
-  const isReg=myRegistrations.has(ev.id);
-  // بناء DOM آمن
-  const div=document.createElement('div');
-  div.className='ecard';
-  div.dataset.evid=ev.id;
-  div.innerHTML=`
+  const g  = ev.gender;
+  const gc = genderClass(g);
+  const st = getSt(ev);
+  const regCount = ev.regCount || 0;
+  const pct  = ev.seats > 0 ? Math.min(100, Math.round(regCount / ev.seats * 100)) : 0;
+  const full = ev.seats > 0 && regCount >= ev.seats;
+  const isReg = myRegistrations.has(ev.id);
+
+  const div = document.createElement('div');
+  div.className = 'ecard';
+  div.dataset.evid = ev.id;
+  div.innerHTML = `
     <div class="ecard-bar ${esc(gc)}"></div>
     <div class="ecb">
       <div class="ecat ${esc(gc)}">${esc(ev.cat)}</div>
@@ -1201,59 +1313,68 @@ function cardH(ev, extraHtml=''){
       <div class="edesc">${esc(ev.desc)}</div>
       <div class="emeta">
         <span class="emi"><span class="emi-d"></span>${esc(fmtD(ev.date))} · ${esc(ev.time)}</span>
-        <span class="emi"><span class="emi-d"></span>${esc(ev.loc||'غير محدد')}</span>
-        ${ev.free?`<span class="emi"><span class="emi-d"></span>مجاني</span>`:`<span class="emi" style="color:#B87A00;font-weight:700"><span class="emi-d" style="background:#B87A00"></span>${esc(String(ev.price))} ريال</span>`}
-        ${g==='both'?`<span class="emi" style="color:var(--ink2);font-weight:700"><span class="emi-d"></span>بنين + بنات</span>`:''}
+        <span class="emi"><span class="emi-d"></span>${esc(ev.loc || 'غير محدد')}</span>
+        ${ev.free
+          ? `<span class="emi"><span class="emi-d"></span>مجاني</span>`
+          : `<span class="emi" style="color:#B87A00;font-weight:700"><span class="emi-d" style="background:#B87A00"></span>${esc(String(ev.price))} ريال</span>`}
+        ${g==='both' ? `<span class="emi" style="color:var(--ink2);font-weight:700"><span class="emi-d"></span>بنين + بنات</span>` : ''}
       </div>
       <div class="ecf">
         <div>
-          <div class="spill"><div class="sdot ${full?'full':'open'}"></div>${full?'اكتملت المقاعد':ev.seats>0?`${ev.seats-regCount} مقعد متاح`:'غير محدود'}</div>
-          ${ev.seats>0?`<div class="pbar"><div class="pbf ${esc(gc)} ${full?'full-c':''}" style="width:${pct}%"></div></div>`:''}
+          <div class="spill">
+            <div class="sdot ${full?'full':'open'}"></div>
+            ${full ? 'اكتملت المقاعد' : ev.seats > 0 ? `${ev.seats-regCount} مقعد متاح` : 'غير محدود'}
+          </div>
+          ${ev.seats > 0 ? `<div class="pbar"><div class="pbf ${esc(gc)} ${full?'full-c':''}" style="width:${pct}%"></div></div>` : ''}
         </div>
         <div style="display:flex;gap:5px;align-items:center">
           <span class="ebadge ${esc(st.ec)}">${esc(st.lbl)}</span>
-          ${isReg?`<span class="ebadge eb-open" style="background:#E6FBF5">مسجّل ✓</span>`:''}
+          ${isReg ? `<span class="ebadge eb-open" style="background:#E6FBF5">مسجّل ✓</span>` : ''}
         </div>
       </div>
       ${extraHtml}
     </div>`;
-  div.addEventListener('click',()=>showDet(ev.id));
+  div.addEventListener('click', () => showDet(ev.id));
   return div;
 }
 
 // ══════════════════════════════════════════════
-//  📅 EVENT DETAIL
+//  📅 تفاصيل الفعالية
 // ══════════════════════════════════════════════
 function showDet(id){
-  const ev=allEvents.find(e=>e.id===id);
-  if(!ev)return;
-  const g=ev.gender; const gc=genderClass(g); const st=getSt(ev);
-  const regCount=ev.regCount||0;
-  const isR=myRegistrations.has(id);
-  const full=ev.seats>0&&regCount>=ev.seats;
-  const pct=ev.seats>0?Math.min(100,Math.round(regCount/ev.seats*100)):0;
-  const canReg=currentProfile&&currentProfile.role==='student'&&(g==='both'||currentProfile.gender===g);
-  const isAdmin=currentProfile&&(currentProfile.role==='admin'||currentProfile.role==='coordinator');
+  const ev = allEvents.find(e => e.id === id);
+  if(!ev) return;
+  const g  = ev.gender;
+  const gc = genderClass(g);
+  const st = getSt(ev);
+  const regCount = ev.regCount || 0;
+  const isR  = myRegistrations.has(id);
+  const full = ev.seats > 0 && regCount >= ev.seats;
+  const pct  = ev.seats > 0 ? Math.min(100, Math.round(regCount/ev.seats*100)) : 0;
+  const canReg   = currentProfile && currentProfile.role==='student' && (g==='both' || currentProfile.gender===g);
+  const isAdmin  = currentProfile && (currentProfile.role==='admin' || currentProfile.role==='coordinator');
 
-  let actionBtn='';
+  let actionBtn = '';
   if(!ev.rr){
-    actionBtn=ev.link?`<a href="${esc(ev.link)}" target="_blank" rel="noopener noreferrer" class="btn btn-p" style="width:100%;justify-content:center;padding:12px">انضم للفعالية ←</a>`:`<button class="btn btn-g" style="width:100%;padding:12px;cursor:default" disabled>لا يتطلب تسجيلاً مسبقاً</button>`;
-  } else if(!currentProfile||isAdmin){
-    actionBtn=`<button class="btn btn-g" style="width:100%;padding:12px;cursor:default" disabled>${!currentProfile?'سجّل دخولك للتسجيل':'أنت إداري — التسجيل للطلاب فقط'}</button>`;
+    actionBtn = ev.link
+      ? `<a href="${esc(ev.link)}" target="_blank" rel="noopener noreferrer" class="btn btn-p" style="width:100%;justify-content:center;padding:12px">انضم للفعالية ←</a>`
+      : `<button class="btn btn-g" style="width:100%;padding:12px;cursor:default" disabled>لا يتطلب تسجيلاً مسبقاً</button>`;
+  } else if(!currentProfile || isAdmin){
+    actionBtn = `<button class="btn btn-g" style="width:100%;padding:12px;cursor:default" disabled>${!currentProfile ? 'سجّل دخولك للتسجيل' : 'أنت إداري — التسجيل للطلاب فقط'}</button>`;
   } else if(!canReg){
-    actionBtn=`<button class="btn btn-g" style="width:100%;padding:12px;cursor:default" disabled>هذه الفعالية ليست لقسمك</button>`;
+    actionBtn = `<button class="btn btn-g" style="width:100%;padding:12px;cursor:default" disabled>هذه الفعالية ليست لقسمك</button>`;
   } else if(isR){
-    actionBtn=`<button class="btn btn-d cancel-reg-btn" style="width:100%;padding:12px">إلغاء التسجيل</button>`;
+    actionBtn = `<button class="btn btn-d cancel-reg-btn" style="width:100%;padding:12px">إلغاء التسجيل</button>`;
   } else if(full){
-    actionBtn=`<button class="btn btn-g" style="width:100%;padding:12px;cursor:default" disabled>اكتملت المقاعد</button>`;
+    actionBtn = `<button class="btn btn-g" style="width:100%;padding:12px;cursor:default" disabled>اكتملت المقاعد</button>`;
   } else {
-    const bCls=g==='girls'?'btn-girls':'btn-p';
-    const bStyle=g==='both'?'background:linear-gradient(90deg,var(--boys),var(--girls));border:none':'';
-    actionBtn=`<button class="btn ${esc(bCls)} reg-ev-btn" style="width:100%;padding:12px;font-size:.92rem;${bStyle}">التسجيل في الفعالية</button>`;
+    const bCls   = g==='girls' ? 'btn-girls' : 'btn-p';
+    const bStyle = g==='both'  ? 'background:linear-gradient(90deg,var(--boys),var(--girls));border:none' : '';
+    actionBtn = `<button class="btn ${esc(bCls)} reg-ev-btn" style="width:100%;padding:12px;font-size:.92rem;${bStyle}">التسجيل في الفعالية</button>`;
   }
 
-  const box=$('mDetB');
-  box.innerHTML=`
+  const box = $('mDetB');
+  box.innerHTML = `
     <button class="mclose" id="detClose">✕</button>
     <div class="det-top ${esc(gc)}">
       <div class="det-bar ${esc(gc)}"></div>
@@ -1272,111 +1393,94 @@ function showDet(id){
       <div class="edm"><div class="edmi">📍</div><div><div class="edmk">المكان</div><div class="edmv">${esc(ev.loc||'غير محدد')}</div></div></div>
       <div class="edm"><div class="edmi">👥</div><div><div class="edmk">التسجيلات</div><div class="edmv">${regCount}${ev.seats>0?' / '+ev.seats:''}</div></div></div>
     </div>
-    ${ev.seats>0?`<div class="pbar" style="width:100%;margin-bottom:16px"><div class="pbf ${esc(gc)} ${full?'full-c':''}" style="width:${pct}%"></div></div>`:''}
+    ${ev.seats>0 ? `<div class="pbar" style="width:100%;margin-bottom:16px"><div class="pbf ${esc(gc)} ${full?'full-c':''}" style="width:${pct}%"></div></div>` : ''}
     ${actionBtn}`;
 
-  box.querySelector('#detClose')?.addEventListener('click',()=>closeM('mDet'));
-  box.querySelector('.reg-ev-btn')?.addEventListener('click',()=>regEv(id));
-  box.querySelector('.cancel-reg-btn')?.addEventListener('click',()=>cancelR(id));
+  box.querySelector('#detClose')?.addEventListener('click', () => closeM('mDet'));
+  box.querySelector('.reg-ev-btn')?.addEventListener('click', () => goToRegPage(id));
+  box.querySelector('.cancel-reg-btn')?.addEventListener('click', () => cancelR(id));
   openM('mDet');
 }
 
 // ══════════════════════════════════════════════
 //  📝 التسجيل في فعالية
 // ══════════════════════════════════════════════
-function regEv(id){goToRegPage(id);}
-
 function goToRegPage(id){
-  const ev=allEvents.find(e=>e.id===id);
-  if(!ev||!currentProfile)return;
-  pendingRegEvId=id;
-  prevPage=currentProfile.gender==='boys'?'boys':'girls';
+  const ev = allEvents.find(e => e.id === id);
+  if(!ev || !currentProfile) return;
+  pendingRegEvId = id;
+  prevPage = currentProfile.gender==='boys' ? 'boys' : 'girls';
   closeM('mDet');
-  const p=currentProfile;
-  $('regF1').value=p.fn; $('regF2').value=p.ln; $('regF3').value=p.email;
-  $('regNote').value='';
-  const g=ev.gender;
-  const barColor=g==='both'?'linear-gradient(90deg,var(--boys),var(--girls))':g==='girls'?'var(--girls)':'var(--boys)';
-  $('regPageBar').style.background=barColor;
-  const btnCls=g==='girls'?'btn-girls':'btn-p';
-  const btnStyle=g==='both'?'background:linear-gradient(90deg,var(--boys),var(--girls));border:none':'';
-  $('regPageBtn').className='btn '+btnCls;
-  $('regPageBtn').style.cssText='width:100%;padding:13px;font-size:.95rem;'+btnStyle;
-  const regCount=ev.regCount||0;
-  $('regPageEvSummary').innerHTML=`
+  const p = currentProfile;
+  $('regF1').value = p.fn; $('regF2').value = p.ln; $('regF3').value = p.email;
+  $('regNote').value = '';
+  const g = ev.gender;
+  const barColor = g==='both'
+    ? 'linear-gradient(90deg,var(--boys),var(--girls))'
+    : g==='girls' ? 'var(--girls)' : 'var(--boys)';
+  $('regPageBar').style.background = barColor;
+  const btnCls   = g==='girls' ? 'btn-girls' : 'btn-p';
+  const btnStyle = g==='both'  ? 'background:linear-gradient(90deg,var(--boys),var(--girls));border:none' : '';
+  $('regPageBtn').className = 'btn ' + btnCls;
+  $('regPageBtn').style.cssText = 'width:100%;padding:13px;font-size:.95rem;' + btnStyle;
+  const regCount = ev.regCount || 0;
+  $('regPageEvSummary').innerHTML = `
     <div style="background:${g==='girls'?'#F3E6FF':g==='both'?'linear-gradient(135deg,#E6F2FF,#F3E6FF)':'#E6F2FF'};border-radius:14px;padding:16px 18px">
       <div style="font-size:.7rem;font-weight:700;color:${g==='girls'?'var(--girls)':g==='both'?'var(--ink2)':'var(--boys)'};margin-bottom:4px">${esc(ev.cat)} · ${esc(genderLabel(g))}</div>
       <div style="font-size:1.05rem;font-weight:800;margin-bottom:8px">${esc(ev.title)}</div>
       <div style="font-size:.8rem;color:var(--ink3);display:flex;flex-direction:column;gap:4px">
         <span>${esc(fmtD(ev.date))} · ${esc(ev.time)}</span>
-        <span>${esc(ev.loc||'غير محدد')}</span>
-        ${ev.seats>0?`<span>${ev.seats-regCount} مقعد متبقي من ${ev.seats}</span>`:'<span>مقاعد غير محدودة</span>'}
-        ${!ev.free?`<span style="color:#B87A00;font-weight:700">رسوم الفعالية: ${esc(String(ev.price))} ريال سعودي</span>`:''}
+        <span>${esc(ev.loc || 'غير محدد')}</span>
+        ${ev.seats > 0 ? `<span>${ev.seats-regCount} مقعد متبقي من ${ev.seats}</span>` : '<span>مقاعد غير محدودة</span>'}
+        ${!ev.free ? `<span style="color:#B87A00;font-weight:700">رسوم الفعالية: ${esc(String(ev.price))} ريال سعودي</span>` : ''}
       </div>
     </div>`;
   showPg('reg');
 }
 
 async function confirmReg(){
-  const ev=allEvents.find(e=>e.id===pendingRegEvId);
-  if(!ev||!currentProfile)return;
-
-  // التحقق مجدداً في الـ client
-  if(ev.seats>0&&(ev.regCount||0)>=ev.seats){toast('اكتملت المقاعد','err');return;}
-  if(myRegistrations.has(pendingRegEvId)){toast('أنت مسجّل بالفعل','err');return;}
-
+  const ev = allEvents.find(e => e.id === pendingRegEvId);
+  if(!ev || !currentProfile) return;
+  if(ev.seats > 0 && (ev.regCount||0) >= ev.seats){ toast('اكتملت المقاعد','err'); return; }
+  if(myRegistrations.has(pendingRegEvId)){ toast('أنت مسجّل بالفعل','err'); return; }
   const note = $('regNote').value.trim().slice(0,500);
-  const btn=$('regPageBtn');
-  btn.disabled=true; btn.textContent='جاري التسجيل...';
-
+  const btn = $('regPageBtn');
+  btn.disabled = true; btn.textContent = 'جاري التسجيل...';
   try{
-    // استخدام batch للأمان
-    const batch=writeBatch(db);
-    const regRef=doc(collection(db,'registrations'));
-    batch.set(regRef,{
-      userId: currentUser.uid,
-      eventId: pendingRegEvId,
-      note,
-      createdAt: serverTimestamp()
-    });
-    // زيادة عداد التسجيلات بشكل آمن
-    batch.update(doc(db,'events',pendingRegEvId),{
-      regCount: increment(1)
-    });
+    const batch = writeBatch(db);
+    const regRef = doc(collection(db,'registrations'));
+    batch.set(regRef,{ userId: currentUser.uid, eventId: pendingRegEvId, note, createdAt: serverTimestamp() });
+    batch.update(doc(db,'events',pendingRegEvId),{ regCount: increment(1) });
     await batch.commit();
-
     myRegistrations.add(pendingRegEvId);
-    const g=ev.gender;
-    const color=g==='girls'?'var(--girls)':'var(--boys)';
-    $('successIcon').style.background=g==='girls'?'#F3E6FF':'#E6F2FF';
-    $('successIcon').textContent='✓';
-    $('successIcon').style.color=color;
-    $('successTitle').textContent='تم تسجيلك بنجاح!';
-    $('successSub').textContent=`تم تسجيل ${currentProfile.fn} في الفعالية. سنتواصل معك قريباً.`;
-    $('successEvCard').innerHTML=`<div style="background:${g==='girls'?'#F3E6FF':'#E6F2FF'};border-radius:14px;padding:16px 18px;text-align:right"><div style="font-size:1rem;font-weight:800;margin-bottom:4px">${esc(ev.title)}</div><div style="font-size:.8rem;color:var(--ink3)">${esc(fmtD(ev.date))} · ${esc(ev.time)}</div></div>`;
-    const btnCls=g==='girls'?'btn-girls':'btn-p';
-    $('successBtn').className='btn '+btnCls;
-    $('successBtn').style.cssText='width:100%;padding:13px;font-size:.95rem';
-    pendingRegEvId=null;
+    const g = ev.gender;
+    const color = g==='girls' ? 'var(--girls)' : 'var(--boys)';
+    $('successIcon').style.background = g==='girls' ? '#F3E6FF' : '#E6F2FF';
+    $('successIcon').textContent = '✓';
+    $('successIcon').style.color = color;
+    $('successTitle').textContent = 'تم تسجيلك بنجاح!';
+    $('successSub').textContent = `تم تسجيل ${currentProfile.fn} في الفعالية. سنتواصل معك قريباً.`;
+    $('successEvCard').innerHTML = `<div style="background:${g==='girls'?'#F3E6FF':'#E6F2FF'};border-radius:14px;padding:16px 18px;text-align:right"><div style="font-size:1rem;font-weight:800;margin-bottom:4px">${esc(ev.title)}</div><div style="font-size:.8rem;color:var(--ink3)">${esc(fmtD(ev.date))} · ${esc(ev.time)}</div></div>`;
+    const btnCls = g==='girls' ? 'btn-girls' : 'btn-p';
+    $('successBtn').className = 'btn ' + btnCls;
+    $('successBtn').style.cssText = 'width:100%;padding:13px;font-size:.95rem';
+    pendingRegEvId = null;
     showPg('success');
   }catch(e){
     toast('خطأ في التسجيل: '+e.message,'err');
-    btn.disabled=false; btn.textContent='تأكيد التسجيل';
+    btn.disabled = false; btn.textContent = 'تأكيد التسجيل';
   }
 }
 
 async function cancelR(id){
-  if(!currentProfile)return;
-  const btn=event?.target;
-  if(btn){btn.disabled=true; btn.textContent='جاري الإلغاء...';}
+  if(!currentProfile) return;
   try{
-    // البحث عن وثيقة التسجيل
-    const q=query(collection(db,'registrations'),where('userId','==',currentUser.uid),where('eventId','==',id));
-    const snap=await getDocs(q);
-    if(snap.empty){toast('لم يُعثر على تسجيلك','err');return;}
-    const batch=writeBatch(db);
-    snap.docs.forEach(d=>batch.delete(d.ref));
-    batch.update(doc(db,'events',id),{regCount:increment(-1)});
+    const q = query(collection(db,'registrations'), where('userId','==',currentUser.uid), where('eventId','==',id));
+    const snap = await getDocs(q);
+    if(snap.empty){ toast('لم يُعثر على تسجيلك','err'); return; }
+    const batch = writeBatch(db);
+    snap.docs.forEach(d => batch.delete(d.ref));
+    batch.update(doc(db,'events',id),{ regCount: increment(-1) });
     await batch.commit();
     myRegistrations.delete(id);
     closeM('mDet');
@@ -1387,134 +1491,179 @@ async function cancelR(id){
   }
 }
 
-function goBackFromReg(){pendingRegEvId=null;if(prevPage)showPg(prevPage);else showPg('login');}
+function goBackFromReg(){
+  pendingRegEvId = null;
+  if(prevPage) showPg(prevPage); else showPg('login');
+}
 function goToEvents(){
-  if(!currentProfile)return;
-  if(currentProfile.role==='admin'||currentProfile.role==='coordinator'){showPg('admin');rAdminD();}
-  else if(currentProfile.gender==='boys'){showPg('boys');sBTab('myE');}
-  else{showPg('girls');sGTab('myE');}
+  if(!currentProfile) return;
+  if(currentProfile.role==='admin' || currentProfile.role==='coordinator'){ showPg('admin'); rAdminD(); }
+  else if(currentProfile.gender==='boys'){ showPg('boys'); sBTab('myE'); }
+  else { showPg('girls'); sGTab('myE'); }
 }
 
 // ══════════════════════════════════════════════
 //  👦 BOYS DASHBOARD
 // ══════════════════════════════════════════════
 function rBoysD(){
-  const p=currentProfile;
-  $('bAv').textContent=p.fn.charAt(0);
-  $('bNm').textContent=p.fn+' '+p.ln;
-  $('bPAv').textContent=p.fn.charAt(0);
-  $('bPN').textContent=p.fn+' '+p.ln;
-  $('bPE').textContent=p.email;
-  $('bPFN').value=p.fn; $('bPLN').value=p.ln;
-  buildSlider('boys'); renderBMyEv(); renderBAll();
+  const p = currentProfile;
+  $('bAv').textContent  = p.fn.charAt(0);
+  $('bNm').textContent  = p.fn + ' ' + p.ln;
+  $('bPAv').textContent = p.fn.charAt(0);
+  $('bPN').textContent  = p.fn + ' ' + p.ln;
+  $('bPE').textContent  = p.email;
+  $('bPFN').value = p.fn;
+  $('bPLN').value = p.ln;
+  buildSlider('boys');
+  renderBMyEv();
+  renderBAll();
 }
+
 function renderBMyEv(){
-  const grid=$('bMyGrid'); grid.innerHTML='';
-  const my=allEvents.filter(e=>myRegistrations.has(e.id)&&(e.gender==='boys'||e.gender==='both'));
+  const grid = $('bMyGrid');
+  grid.innerHTML = '';
+  const my = allEvents.filter(e => myRegistrations.has(e.id) && (e.gender==='boys' || e.gender==='both'));
   if(!my.length){
-    grid.innerHTML='<div class="empty" style="grid-column:1/-1"><span class="empty-icon">📅</span><h3>لم تسجل في أي فعالية بعد</h3><p>تصفح الفعاليات واشترك!</p></div>';
+    grid.innerHTML = '<div class="empty" style="grid-column:1/-1"><span class="empty-icon">📅</span><h3>لم تسجل في أي فعالية بعد</h3><p>تصفح الفعاليات واشترك!</p></div>';
     return;
   }
-  my.forEach(ev=>{
-    const cancelBtn=document.createElement('div');
-    cancelBtn.style.cssText='padding:10px 18px 14px;display:flex;justify-content:flex-end';
-    const b=document.createElement('button');
-    b.className='btn btn-d btn-xs';
-    b.textContent='إلغاء التسجيل';
-    b.addEventListener('click',e=>{e.stopPropagation();cancelR(ev.id);});
+  my.forEach(ev => {
+    const cancelBtn = document.createElement('div');
+    cancelBtn.style.cssText = 'padding:10px 18px 14px;display:flex;justify-content:flex-end';
+    const b = document.createElement('button');
+    b.className = 'btn btn-d btn-xs';
+    b.textContent = 'إلغاء التسجيل';
+    b.addEventListener('click', e => { e.stopPropagation(); cancelR(ev.id); });
     cancelBtn.appendChild(b);
-    const card=cardH(ev);
+    const card = cardH(ev);
     card.appendChild(cancelBtn);
     grid.appendChild(card);
   });
 }
+
 function renderBAll(){
-  const grid=$('bAllGrid'); grid.innerHTML='';
-  const evs=allEvents.filter(e=>(e.gender==='boys'||e.gender==='both')&&(!bQ||e.title.includes(bQ)||e.cat.includes(bQ)));
-  if(!evs.length){grid.innerHTML='<div class="empty" style="grid-column:1/-1"><span class="empty-icon">🔍</span><h3>لا توجد نتائج</h3></div>';return;}
-  evs.forEach(ev=>grid.appendChild(cardH(ev)));
+  const grid = $('bAllGrid');
+  grid.innerHTML = '';
+  const evs = allEvents.filter(e =>
+    (e.gender==='boys' || e.gender==='both') &&
+    (!bQ || e.title.includes(bQ) || e.cat.includes(bQ))
+  );
+  if(!evs.length){
+    grid.innerHTML = '<div class="empty" style="grid-column:1/-1"><span class="empty-icon">🔍</span><h3>لا توجد نتائج</h3></div>';
+    return;
+  }
+  evs.forEach(ev => grid.appendChild(cardH(ev)));
 }
-function searchBoys(v){bQ=v;renderBAll();}
+
+function searchBoys(v){ bQ = v; renderBAll(); }
+
 function sBTab(tab){
-  ['myE','all','pr'].forEach(t=>{$('bt-'+t).style.display=t===tab?'block':'none'});
-  document.querySelectorAll('#pg-boys .sml').forEach((a,i)=>{a.classList.toggle('active',['myE','all','pr'][i]===tab)});
-  if(tab==='all')renderBAll();
+  ['myE','all','pr'].forEach(t => { $('bt-'+t).style.display = t===tab ? 'block' : 'none'; });
+  document.querySelectorAll('#pg-boys .sml').forEach((a,i) => {
+    a.classList.toggle('active', ['myE','all','pr'][i]===tab);
+  });
+  if(tab==='all') renderBAll();
+  // إعادة بناء الـ Slider عند العودة لـ myE
+  if(tab==='myE') buildSlider('boys');
 }
 
 // ══════════════════════════════════════════════
 //  👧 GIRLS DASHBOARD
 // ══════════════════════════════════════════════
 function rGirlsD(){
-  const p=currentProfile;
-  $('gAv').textContent=p.fn.charAt(0);
-  $('gNm').textContent=p.fn+' '+p.ln;
-  $('gPAv').textContent=p.fn.charAt(0);
-  $('gPN').textContent=p.fn+' '+p.ln;
-  $('gPE').textContent=p.email;
-  $('gPFN').value=p.fn; $('gPLN').value=p.ln;
-  buildSlider('girls'); renderGMyEv(); renderGAll();
+  const p = currentProfile;
+  $('gAv').textContent  = p.fn.charAt(0);
+  $('gNm').textContent  = p.fn + ' ' + p.ln;
+  $('gPAv').textContent = p.fn.charAt(0);
+  $('gPN').textContent  = p.fn + ' ' + p.ln;
+  $('gPE').textContent  = p.email;
+  $('gPFN').value = p.fn;
+  $('gPLN').value = p.ln;
+  buildSlider('girls');
+  renderGMyEv();
+  renderGAll();
 }
+
 function renderGMyEv(){
-  const grid=$('gMyGrid'); grid.innerHTML='';
-  const my=allEvents.filter(e=>myRegistrations.has(e.id)&&(e.gender==='girls'||e.gender==='both'));
+  const grid = $('gMyGrid');
+  grid.innerHTML = '';
+  const my = allEvents.filter(e => myRegistrations.has(e.id) && (e.gender==='girls' || e.gender==='both'));
   if(!my.length){
-    grid.innerHTML='<div class="empty" style="grid-column:1/-1"><span class="empty-icon">📅</span><h3>لم تسجلي في أي فعالية بعد</h3><p>تصفحي الفعاليات واشتركي!</p></div>';
+    grid.innerHTML = '<div class="empty" style="grid-column:1/-1"><span class="empty-icon">📅</span><h3>لم تسجلي في أي فعالية بعد</h3><p>تصفحي الفعاليات واشتركي!</p></div>';
     return;
   }
-  my.forEach(ev=>{
-    const cancelBtn=document.createElement('div');
-    cancelBtn.style.cssText='padding:10px 18px 14px;display:flex;justify-content:flex-end';
-    const b=document.createElement('button');
-    b.className='btn btn-d btn-xs';
-    b.textContent='إلغاء التسجيل';
-    b.addEventListener('click',e=>{e.stopPropagation();cancelR(ev.id);});
+  my.forEach(ev => {
+    const cancelBtn = document.createElement('div');
+    cancelBtn.style.cssText = 'padding:10px 18px 14px;display:flex;justify-content:flex-end';
+    const b = document.createElement('button');
+    b.className = 'btn btn-d btn-xs';
+    b.textContent = 'إلغاء التسجيل';
+    b.addEventListener('click', e => { e.stopPropagation(); cancelR(ev.id); });
     cancelBtn.appendChild(b);
-    const card=cardH(ev);
+    const card = cardH(ev);
     card.appendChild(cancelBtn);
     grid.appendChild(card);
   });
 }
+
 function renderGAll(){
-  const grid=$('gAllGrid'); grid.innerHTML='';
-  const evs=allEvents.filter(e=>(e.gender==='girls'||e.gender==='both')&&(!gQ||e.title.includes(gQ)||e.cat.includes(gQ)));
-  if(!evs.length){grid.innerHTML='<div class="empty" style="grid-column:1/-1"><span class="empty-icon">🔍</span><h3>لا توجد نتائج</h3></div>';return;}
-  evs.forEach(ev=>grid.appendChild(cardH(ev)));
+  const grid = $('gAllGrid');
+  grid.innerHTML = '';
+  const evs = allEvents.filter(e =>
+    (e.gender==='girls' || e.gender==='both') &&
+    (!gQ || e.title.includes(gQ) || e.cat.includes(gQ))
+  );
+  if(!evs.length){
+    grid.innerHTML = '<div class="empty" style="grid-column:1/-1"><span class="empty-icon">🔍</span><h3>لا توجد نتائج</h3></div>';
+    return;
+  }
+  evs.forEach(ev => grid.appendChild(cardH(ev)));
 }
-function searchGirls(v){gQ=v;renderGAll();}
+
+function searchGirls(v){ gQ = v; renderGAll(); }
+
 function sGTab(tab){
-  ['myE','all','pr'].forEach(t=>{$('gt-'+t).style.display=t===tab?'block':'none'});
-  document.querySelectorAll('#pg-girls .sml').forEach((a,i)=>{a.classList.toggle('active',['myE','all','pr'][i]===tab)});
-  if(tab==='all')renderGAll();
+  ['myE','all','pr'].forEach(t => { $('gt-'+t).style.display = t===tab ? 'block' : 'none'; });
+  document.querySelectorAll('#pg-girls .sml').forEach((a,i) => {
+    a.classList.toggle('active', ['myE','all','pr'][i]===tab);
+  });
+  if(tab==='all') renderGAll();
+  if(tab==='myE') buildSlider('girls');
 }
 
 // ══════════════════════════════════════════════
 //  ⚙️ ADMIN DASHBOARD
 // ══════════════════════════════════════════════
 function rAdminD(){
-  const p=currentProfile;
-  $('aAv').textContent=p.fn.charAt(0);
-  $('aNm').textContent=p.fn+' '+p.ln;
-  rAdminStats(); renderAdminTables();
-  $('eDt').min=new Date().toISOString().split('T')[0];
+  const p = currentProfile;
+  $('aAv').textContent = p.fn.charAt(0);
+  $('aNm').textContent = p.fn + ' ' + p.ln;
+  rAdminStats();
+  renderAdminTables();
+  $('eDt').min = new Date().toISOString().split('T')[0];
 }
+
 function rAdminStats(){
-  const bc=allEvents.filter(e=>e.gender==='boys').length;
-  const gc=allEvents.filter(e=>e.gender==='girls').length;
-  const bothc=allEvents.filter(e=>e.gender==='both').length;
-  const tr=allEvents.reduce((a,e)=>a+(e.regCount||0),0);
-  $('as1').textContent=bc+gc+bothc; $('as2').textContent=tr;
-  $('as3').textContent=bc; $('as4').textContent=gc;
-  $('aBoysBadge').textContent=bc+' فعالية';
-  $('aGirlsBadge').textContent=gc+' فعالية';
-  $('aBothBadge').textContent=bothc+' فعالية';
+  const bc    = allEvents.filter(e => e.gender==='boys').length;
+  const gc    = allEvents.filter(e => e.gender==='girls').length;
+  const bothc = allEvents.filter(e => e.gender==='both').length;
+  const tr    = allEvents.reduce((a,e) => a + (e.regCount||0), 0);
+  $('as1').textContent = bc + gc + bothc;
+  $('as2').textContent = tr;
+  $('as3').textContent = bc;
+  $('as4').textContent = gc;
+  $('aBoysBadge').textContent  = bc + ' فعالية';
+  $('aGirlsBadge').textContent = gc + ' فعالية';
+  $('aBothBadge').textContent  = bothc + ' فعالية';
 }
+
 function evTable(evs){
-  if(!evs.length)return`<div class="empty"><span class="empty-icon">📋</span><h3>لا توجد فعاليات بعد</h3></div>`;
-  return`<div class="etw"><table class="etbl">
+  if(!evs.length) return `<div class="empty"><span class="empty-icon">📋</span><h3>لا توجد فعاليات بعد</h3></div>`;
+  return `<div class="etw"><table class="etbl">
     <thead><tr><th>الفعالية</th><th>التصنيف</th><th>التاريخ</th><th>التسجيلات</th><th>الرسوم</th><th>الحالة</th><th>إجراءات</th></tr></thead>
-    <tbody>${evs.map(ev=>{
-      const st=getSt(ev); const regCount=ev.regCount||0;
-      return`<tr>
+    <tbody>${evs.map(ev => {
+      const st = getSt(ev); const regCount = ev.regCount || 0;
+      return `<tr>
         <td><div style="font-weight:700;font-size:.87rem">${esc(ev.title)}</div><div style="font-size:.72rem;color:var(--ink3)">${esc(ev.loc||'')}</div></td>
         <td><span class="tag tag-${ev.gender==='boys'?'b':ev.gender==='girls'?'g':'both'}">${esc(ev.cat)}</span></td>
         <td style="color:var(--ink3);font-size:.8rem;white-space:nowrap">${esc(fmtD(ev.date))}</td>
@@ -1529,434 +1678,460 @@ function evTable(evs){
     }).join('')}</tbody>
   </table></div>`;
 }
+
 function renderAdminTables(){
-  const both=allEvents.filter(e=>e.gender==='both');
-  const boys=allEvents.filter(e=>e.gender==='boys');
-  const girls=allEvents.filter(e=>e.gender==='girls');
-  $('aBothTable').innerHTML=evTable(both);
-  $('aBoysTable').innerHTML=evTable(boys);
-  $('aGirlsTable').innerHTML=evTable(girls);
-  // ربط الأزرار
-  document.querySelectorAll('.view-regs-btn').forEach(b=>b.addEventListener('click',()=>viewRegs(b.dataset.evid)));
-  document.querySelectorAll('.del-ev-btn').forEach(b=>b.addEventListener('click',()=>delEv(b.dataset.evid)));
+  const both  = allEvents.filter(e => e.gender==='both');
+  const boys  = allEvents.filter(e => e.gender==='boys');
+  const girls = allEvents.filter(e => e.gender==='girls');
+  $('aBothTable').innerHTML  = evTable(both);
+  $('aBoysTable').innerHTML  = evTable(boys);
+  $('aGirlsTable').innerHTML = evTable(girls);
+  document.querySelectorAll('.view-regs-btn').forEach(b => b.addEventListener('click', () => viewRegs(b.dataset.evid)));
+  document.querySelectorAll('.del-ev-btn').forEach(b   => b.addEventListener('click', () => delEv(b.dataset.evid)));
 }
 
 async function addEv(){
-  const t=$('eT').value.trim();
-  const c=$('eC').value;
-  const g=$('eG').value;
-  const d=$('eD').value.trim();
-  const dt=$('eDt').value;
-  const tm=$('eTm').value;
-  const isFree=$('eFr').checked;
-  const price=isFree?0:parseFloat($('ePrice').value)||0;
-  const lkRaw=$('eLk').value.trim();
-
-  if(!t||!c||!g||!d||!dt||!tm){toast('يرجى ملء الحقول المطلوبة','err');return;}
-  if(!isFree&&!price){toast('يرجى إدخال رسوم الفعالية','err');return;}
-
-  // التحقق من الرابط
+  const t    = $('eT').value.trim();
+  const c    = $('eC').value;
+  const g    = $('eG').value;
+  const d    = $('eD').value.trim();
+  const dt   = $('eDt').value;
+  const tm   = $('eTm').value;
+  const isFree = $('eFr').checked;
+  const price  = isFree ? 0 : parseFloat($('ePrice').value) || 0;
+  const lkRaw  = $('eLk').value.trim();
+  if(!t || !c || !g || !d || !dt || !tm){ toast('يرجى ملء الحقول المطلوبة','err'); return; }
+  if(!isFree && !price){ toast('يرجى إدخال رسوم الفعالية','err'); return; }
   const lk = lkRaw ? sanitizeUrl(lkRaw) : '';
-  if(lkRaw&&!lk){toast('الرابط غير صالح','err');return;}
-
-  // تعقيم النصوص
-  const cleanT=sanitizeText(t);
-  const cleanD=sanitizeText(d);
-  const cleanL=sanitizeText($('eL').value.trim());
-  if(!cleanT||!cleanD){toast('النصوص تحتوي على محارف غير مسموح بها','err');return;}
-
-  const btn=event?.target;
-  if(btn){btn.disabled=true; btn.textContent='جاري النشر...';}
+  if(lkRaw && !lk){ toast('الرابط غير صالح','err'); return; }
+  const cleanT = sanitizeText(t);
+  const cleanD = sanitizeText(d);
+  const cleanL = sanitizeText($('eL').value.trim());
+  if(!cleanT || !cleanD){ toast('النصوص تحتوي على محارف غير مسموح بها','err'); return; }
+  const btn = document.querySelector('#at-add .btn-p');
+  if(btn){ btn.disabled = true; btn.textContent = 'جاري النشر...'; }
   try{
     await addDoc(collection(db,'events'),{
-      title:cleanT, cat:sanitizeText(c), gender:g,
-      desc:cleanD, date:dt, time:tm,
-      loc:cleanL, seats:Math.max(0,parseInt($('eS').value)||0),
-      regCount:0,
-      rr:$('eRR').checked, free:isFree, price,
-      link:lk,
-      createdBy:currentUser.uid,
-      createdAt:serverTimestamp()
+      title: cleanT, cat: sanitizeText(c), gender: g,
+      desc: cleanD, date: dt, time: tm,
+      loc: cleanL, seats: Math.max(0, parseInt($('eS').value)||0),
+      regCount: 0, rr: $('eRR').checked, free: isFree, price,
+      link: lk, createdBy: currentUser.uid, createdAt: serverTimestamp()
     });
-    ['eT','eD','eL','eLk','eS','ePrice'].forEach(id=>$(id).value='');
-    $('eC').value=''; $('eDt').value=''; $('eTm').value='';
-    $('eFr').checked=true; $('priceFieldWrap').classList.remove('show');
-    toast('تم نشر الفعالية','ok'); sATab('all');
+    ['eT','eD','eL','eLk','eS','ePrice'].forEach(id => $(id).value = '');
+    $('eC').value = ''; $('eDt').value = ''; $('eTm').value = '';
+    $('eFr').checked = true;
+    $('priceFieldWrap').classList.remove('show');
+    toast('تم نشر الفعالية','ok');
+    sATab('all');
   }catch(e){
     toast('خطأ: '+e.message,'err');
   }finally{
-    if(btn){btn.disabled=false; btn.textContent='نشر الفعالية';}
+    if(btn){ btn.disabled = false; btn.textContent = 'نشر الفعالية'; }
   }
 }
 
 async function delEv(id){
-  if(!confirm('هل أنت متأكد من حذف هذه الفعالية؟'))return;
+  if(!confirm('هل أنت متأكد من حذف هذه الفعالية؟')) return;
   try{
     await deleteDoc(doc(db,'events',id));
     toast('تم حذف الفعالية','err');
-  }catch(e){toast('خطأ: '+e.message,'err');}
+  }catch(e){ toast('خطأ: '+e.message,'err'); }
 }
 
 async function viewRegs(evId){
-  const ev=allEvents.find(e=>e.id===evId); if(!ev)return;
-  const q=query(collection(db,'registrations'),where('eventId','==',evId));
-  const snap=await getDocs(q);
-  const regs=snap.docs.map(d=>d.data());
-  // جلب بيانات المستخدمين
-  const userIds=[...new Set(regs.map(r=>r.userId))];
-  const users=[];
+  const ev = allEvents.find(e => e.id===evId); if(!ev) return;
+  const q  = query(collection(db,'registrations'), where('eventId','==',evId));
+  const snap = await getDocs(q);
+  const regs = snap.docs.map(d => d.data());
+  const userIds = [...new Set(regs.map(r => r.userId))];
+  const users = [];
   for(const uid of userIds){
-    const s=await getDoc(doc(db,'users',uid));
-    if(s.exists()) users.push({uid,...s.data()});
+    const s = await getDoc(doc(db,'users',uid));
+    if(s.exists()) users.push({uid, ...s.data()});
   }
-  const regsC=$('regsC');
-  regsC.innerHTML=`<div style="padding:16px;background:#fff;border-radius:var(--r2);border:1.5px solid #E8E8F2;margin-bottom:14px">
+  const regsC = $('regsC');
+  regsC.innerHTML = `<div style="padding:16px;background:#fff;border-radius:var(--r2);border:1.5px solid #E8E8F2;margin-bottom:14px">
     <div style="font-weight:800;font-size:.95rem;margin-bottom:3px">${esc(ev.title)}</div>
     <div style="font-size:.78rem;color:var(--ink3)">${regs.length} مسجل — ${esc(genderLabel(ev.gender))}</div>
   </div>
-  ${users.length?`<div style="background:#fff;border-radius:var(--r2);border:1.5px solid #E8E8F2;padding:16px 20px">
-    <ul class="rlist">${users.map(u=>`<li class="ri">
-      <div class="rav ${u.gender==='girls'?'girls-av':''}">${esc(u.fn.charAt(0))}</div>
-      <div><div style="font-size:.86rem;font-weight:700">${esc(u.fn)} ${esc(u.ln)}</div><div style="font-size:.74rem;color:var(--ink3)">${esc(u.email)} · ${u.gender==='girls'?'بنات':'بنين'}</div></div>
-    </li>`).join('')}</ul>
-  </div>`:'<div class="empty"><span class="empty-icon">👥</span><h3>لا يوجد مسجلون بعد</h3></div>'}`;
+  ${users.length
+    ? `<div style="background:#fff;border-radius:var(--r2);border:1.5px solid #E8E8F2;padding:16px 20px">
+        <ul class="rlist">${users.map(u => `<li class="ri">
+          <div class="rav ${u.gender==='girls'?'girls-av':''}">${esc(u.fn.charAt(0))}</div>
+          <div><div style="font-size:.86rem;font-weight:700">${esc(u.fn)} ${esc(u.ln)}</div><div style="font-size:.74rem;color:var(--ink3)">${esc(u.email)} · ${u.gender==='girls'?'بنات':'بنين'}</div></div>
+        </li>`).join('')}</ul>
+       </div>`
+    : '<div class="empty"><span class="empty-icon">👥</span><h3>لا يوجد مسجلون بعد</h3></div>'}`;
   sATab('regs');
 }
 
 function sATab(tab){
-  ['all','add','cats','regs','users','notes'].forEach(t=>{const el=$('at-'+t);if(el)el.style.display=t===tab?'block':'none'});
-  document.querySelectorAll('#pg-admin .sml').forEach((a,i)=>{a.classList.toggle('active',['all','add','cats','regs','users','notes'][i]===tab)});
-  if(tab==='all'){rAdminStats();renderAdminTables();}
-  if(tab==='add'){populateCatSelect();}
-  if(tab==='cats'){renderCatsList();}
-  if(tab==='users'){renderUsersList();}
-  if(tab==='notes'){renderNotesInbox();markNotesRead();}
+  ['all','add','cats','regs','users','notes'].forEach(t => {
+    const el = $('at-'+t); if(el) el.style.display = t===tab ? 'block' : 'none';
+  });
+  document.querySelectorAll('#pg-admin .sml').forEach((a,i) => {
+    a.classList.toggle('active', ['all','add','cats','regs','users','notes'][i]===tab);
+  });
+  if(tab==='all')   { rAdminStats(); renderAdminTables(); }
+  if(tab==='add')   populateCatSelect();
+  if(tab==='cats')  renderCatsList();
+  if(tab==='users') renderUsersList();
+  if(tab==='notes') { renderNotesInbox(); markNotesRead(); }
 }
 
 // ══════════════════════════════════════════════
 //  🗂️ CATEGORIES
 // ══════════════════════════════════════════════
 function populateCatSelect(){
-  const sel=$('eC');
-  sel.innerHTML='<option value="">اختر التصنيف</option>';
-  allCategories.forEach(c=>{const o=document.createElement('option');o.value=c;o.textContent=c;sel.appendChild(o);});
+  const sel = $('eC');
+  sel.innerHTML = '<option value="">اختر التصنيف</option>';
+  allCategories.forEach(c => {
+    const o = document.createElement('option');
+    o.value = c; o.textContent = c;
+    sel.appendChild(o);
+  });
 }
+
 function renderCatsList(){
-  const ul=$('catsList');
-  if(!allCategories.length){ul.innerHTML='<li style="padding:16px 18px;font-size:.85rem;color:var(--ink3)">لا توجد تصنيفات بعد</li>';return;}
-  ul.innerHTML='';
-  allCategories.forEach((c,i)=>{
-    const li=document.createElement('li');
-    li.style.cssText='display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-bottom:1px solid #F0F0F8';
-    const span=document.createElement('span');
-    span.style.cssText='font-size:.88rem;font-weight:600';
-    span.textContent=c;
-    const btn=document.createElement('button');
-    btn.className='btn btn-d btn-xs';
-    btn.textContent='حذف';
-    btn.addEventListener('click',()=>delCat(i));
-    li.append(span,btn);
+  const ul = $('catsList');
+  if(!allCategories.length){
+    ul.innerHTML = '<li style="padding:16px 18px;font-size:.85rem;color:var(--ink3)">لا توجد تصنيفات بعد</li>';
+    return;
+  }
+  ul.innerHTML = '';
+  allCategories.forEach((c,i) => {
+    const li  = document.createElement('li');
+    li.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-bottom:1px solid #F0F0F8';
+    const span = document.createElement('span');
+    span.style.cssText = 'font-size:.88rem;font-weight:600';
+    span.textContent = c;
+    const btn = document.createElement('button');
+    btn.className = 'btn btn-d btn-xs';
+    btn.textContent = 'حذف';
+    btn.addEventListener('click', () => delCat(i));
+    li.append(span, btn);
     ul.appendChild(li);
   });
 }
+
 async function addCat(){
-  const inp=$('newCatInput'),val=inp.value.trim();
-  if(!val){toast('أدخل اسم التصنيف','err');return;}
-  const clean=sanitizeText(val);
-  if(!clean){toast('اسم غير صالح','err');return;}
-  if(allCategories.includes(clean)){toast('التصنيف موجود بالفعل','err');return;}
+  const inp = $('newCatInput'), val = inp.value.trim();
+  if(!val){ toast('أدخل اسم التصنيف','err'); return; }
+  const clean = sanitizeText(val);
+  if(!clean){ toast('اسم غير صالح','err'); return; }
+  if(allCategories.includes(clean)){ toast('التصنيف موجود بالفعل','err'); return; }
   try{
-    await addDoc(collection(db,'categories'),{name:clean,createdAt:serverTimestamp()});
+    await addDoc(collection(db,'categories'),{ name: clean, createdAt: serverTimestamp() });
     allCategories.push(clean);
-    inp.value=''; renderCatsList();
+    inp.value = '';
+    renderCatsList();
     toast('تم إضافة التصنيف','ok');
-  }catch(e){toast('خطأ: '+e.message,'err');}
+  }catch(e){ toast('خطأ: '+e.message,'err'); }
 }
+
 function delCat(i){
-  if(!confirm('هل أنت متأكد من حذف هذا التصنيف؟'))return;
-  // نبحث عن الـ document في Firestore ونحذفه
-  getDocs(query(collection(db,'categories'),where('name','==',allCategories[i]))).then(snap=>{
-    const batch=writeBatch(db);
-    snap.docs.forEach(d=>batch.delete(d.ref));
+  if(!confirm('هل أنت متأكد من حذف هذا التصنيف؟')) return;
+  getDocs(query(collection(db,'categories'), where('name','==',allCategories[i]))).then(snap => {
+    const batch = writeBatch(db);
+    snap.docs.forEach(d => batch.delete(d.ref));
     return batch.commit();
-  }).then(()=>{
+  }).then(() => {
     allCategories.splice(i,1);
     renderCatsList();
     toast('تم حذف التصنيف','err');
-  }).catch(e=>toast('خطأ: '+e.message,'err'));
+  }).catch(e => toast('خطأ: '+e.message,'err'));
 }
 
 // ══════════════════════════════════════════════
-//  👥 USERS MANAGEMENT
+//  👥 USERS
 // ══════════════════════════════════════════════
 async function renderUsersList(){
-  const ul=$('usersList');
-  ul.innerHTML='<div style="padding:20px;text-align:center;color:var(--ink3)">جاري التحميل...</div>';
+  const ul = $('usersList');
+  ul.innerHTML = '<div style="padding:20px;text-align:center;color:var(--ink3)">جاري التحميل...</div>';
   try{
-    const snap=await getDocs(query(collection(db,'users'),orderBy('createdAt','asc'),limit(200)));
-    const usrs=snap.docs.map(d=>({uid:d.id,...d.data()})).filter(u=>u.role!=='admin'&&u.role!=='coordinator');
-    if(!usrs.length){ul.innerHTML='<div style="padding:20px;text-align:center;color:var(--ink3);font-size:.85rem">لا يوجد مستخدمون بعد</div>';return;}
-    const roleLabel={student:'طالب',coordinator:'منسق'};
-    const gLabel={boys:'بنين',girls:'بنات'};
-    const table=document.createElement('table');
-    table.className='etbl'; table.style.width='100%';
-    table.innerHTML=`<thead><tr><th>الاسم</th><th>البريد</th><th>الدور</th><th>القسم</th></tr></thead>`;
-    const tbody=document.createElement('tbody');
-    usrs.forEach(u=>{
-      const tr=document.createElement('tr');
-      tr.innerHTML=`<td style="font-weight:700">${esc(u.fn)} ${esc(u.ln)}</td>
+    const snap = await getDocs(query(collection(db,'users'), orderBy('createdAt','asc'), limit(200)));
+    const usrs = snap.docs.map(d => ({uid:d.id,...d.data()})).filter(u => u.role!=='admin' && u.role!=='coordinator');
+    if(!usrs.length){
+      ul.innerHTML = '<div style="padding:20px;text-align:center;color:var(--ink3);font-size:.85rem">لا يوجد مستخدمون بعد</div>';
+      return;
+    }
+    const roleLabel = {student:'طالب', coordinator:'منسق'};
+    const gLabel    = {boys:'بنين', girls:'بنات'};
+    const table = document.createElement('table');
+    table.className = 'etbl'; table.style.width = '100%';
+    table.innerHTML = `<thead><tr><th>الاسم</th><th>البريد</th><th>الدور</th><th>القسم</th></tr></thead>`;
+    const tbody = document.createElement('tbody');
+    usrs.forEach(u => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td style="font-weight:700">${esc(u.fn)} ${esc(u.ln)}</td>
         <td style="color:var(--ink3);font-size:.8rem">${esc(u.email)}</td>
         <td><span class="tag ${u.role==='coordinator'?'tag-b':'tag-o'}">${esc(roleLabel[u.role]||u.role)}</span></td>
         <td><span class="tag ${u.gender==='girls'?'tag-g':'tag-b'}">${esc(gLabel[u.gender]||'')}</span></td>`;
       tbody.appendChild(tr);
     });
     table.appendChild(tbody);
-    ul.innerHTML='';
-    ul.appendChild(table);
-  }catch(e){ul.innerHTML='<div style="padding:20px;text-align:center;color:var(--coral)">خطأ في التحميل</div>';}
+    ul.innerHTML = ''; ul.appendChild(table);
+  }catch(e){
+    ul.innerHTML = '<div style="padding:20px;text-align:center;color:var(--coral)">خطأ في التحميل</div>';
+  }
 }
 
 // ══════════════════════════════════════════════
 //  📬 NOTES
 // ══════════════════════════════════════════════
 function openNotes(){
-  const sel=$('noteContext');
-  sel.innerHTML='<option value="general">عام (غير مرتبط بفعالية)</option>';
-  const userGender=currentProfile?currentProfile.gender:'boys';
-  allEvents.filter(e=>e.gender===userGender||e.gender==='both').forEach(ev=>{
-    const o=document.createElement('option');
-    o.value='event:'+ev.id;
-    o.textContent='فعالية: '+ev.title;
+  const sel = $('noteContext');
+  sel.innerHTML = '<option value="general">عام (غير مرتبط بفعالية)</option>';
+  const userGender = currentProfile ? currentProfile.gender : 'boys';
+  allEvents.filter(e => e.gender===userGender || e.gender==='both').forEach(ev => {
+    const o = document.createElement('option');
+    o.value = 'event:' + ev.id;
+    o.textContent = 'فعالية: ' + ev.title;
     sel.appendChild(o);
   });
-  $('noteTextField').value=''; $('noteType').value='';
-  $('noteTypeErr').style.display='none'; $('complaintNotice').style.display='none';
-  const ns=$('noteSendStatus');if(ns)ns.style.display='none';
-  const btn=$('noteSendBtn');if(btn){btn.disabled=false;btn.textContent='إرسال الملاحظة';}
+  $('noteTextField').value = '';
+  $('noteType').value = '';
+  $('noteTypeErr').style.display = 'none';
+  $('complaintNotice').style.display = 'none';
+  const ns = $('noteSendStatus'); if(ns) ns.style.display = 'none';
+  const btn = $('noteSendBtn'); if(btn){ btn.disabled = false; btn.textContent = 'إرسال الملاحظة'; }
   openM('mNotes');
 }
 
 function onNoteTypeChange(sel){
-  $('noteTypeErr').style.display='none';
-  $('complaintNotice').style.display=sel.value==='complaint'?'block':'none';
+  $('noteTypeErr').style.display = 'none';
+  $('complaintNotice').style.display = sel.value==='complaint' ? 'block' : 'none';
 }
 
 async function submitNote(){
-  const note=$('noteTextField').value.trim();
-  const noteType=$('noteType').value;
-  if(!noteType){$('noteTypeErr').style.display='block';toast('يرجى اختيار نوع الملاحظة','err');return;}
-  if(!note){toast('الرجاء كتابة ملاحظتك أولاً','err');return;}
-  if(note.length>2000){toast('الملاحظة طويلة جداً','err');return;}
-  if(!['complaint','suggestion','general'].includes(noteType)){toast('نوع غير صالح','err');return;}
-
-  const contextVal=$('noteContext').value;
-  let contextLabel='عام';
+  const note     = $('noteTextField').value.trim();
+  const noteType = $('noteType').value;
+  if(!noteType){ $('noteTypeErr').style.display='block'; toast('يرجى اختيار نوع الملاحظة','err'); return; }
+  if(!note){ toast('الرجاء كتابة ملاحظتك أولاً','err'); return; }
+  if(note.length > 2000){ toast('الملاحظة طويلة جداً','err'); return; }
+  if(!['complaint','suggestion','general'].includes(noteType)){ toast('نوع غير صالح','err'); return; }
+  const contextVal = $('noteContext').value;
+  let contextLabel = 'عام';
   if(contextVal.startsWith('event:')){
-    const evId=contextVal.split(':')[1];
-    const ev=allEvents.find(e=>e.id===evId);
-    if(ev) contextLabel='فعالية: '+ev.title;
+    const evId = contextVal.split(':')[1];
+    const ev = allEvents.find(e => e.id===evId);
+    if(ev) contextLabel = 'فعالية: ' + ev.title;
   }
-
-  const isComplaint=(noteType==='complaint');
-  const btn=$('noteSendBtn'); btn.disabled=true; btn.textContent='جاري الإرسال...';
+  const isComplaint = (noteType==='complaint');
+  const btn = $('noteSendBtn'); btn.disabled = true; btn.textContent = 'جاري الإرسال...';
   try{
     await addDoc(collection(db,'notes'),{
-      noteType,
-      context: contextLabel,
-      note: sanitizeText(note)||note,
-      // الشكاوى مجهولة الهوية تماماً
-      name: isComplaint ? null : (currentProfile?currentProfile.fn+' '+currentProfile.ln:null),
-      gender: isComplaint ? null : (currentProfile?currentProfile.gender:null),
-      read: false,
-      resolved: false,
-      createdAt: serverTimestamp()
+      noteType, context: contextLabel,
+      note: sanitizeText(note) || note,
+      name:   isComplaint ? null : (currentProfile ? currentProfile.fn+' '+currentProfile.ln : null),
+      gender: isComplaint ? null : (currentProfile ? currentProfile.gender : null),
+      read: false, resolved: false, createdAt: serverTimestamp()
     });
-    const ns=$('noteSendStatus');
+    const ns = $('noteSendStatus');
     ns.style.background='#E6FBF5'; ns.style.color='var(--teal)';
-    ns.textContent='✓ تم إرسال ملاحظتك للإدارة بنجاح!';
-    ns.style.display='block';
-    btn.textContent='تم الإرسال ✓';
-    setTimeout(()=>closeM('mNotes'),2000);
+    ns.textContent = '✓ تم إرسال ملاحظتك للإدارة بنجاح!';
+    ns.style.display = 'block';
+    btn.textContent = 'تم الإرسال ✓';
+    setTimeout(() => closeM('mNotes'), 2000);
   }catch(e){
     toast('خطأ: '+e.message,'err');
-    btn.disabled=false; btn.textContent='إرسال الملاحظة';
+    btn.disabled = false; btn.textContent = 'إرسال الملاحظة';
   }
 }
 
-// ══════════════════════════════════════════════
-//  📬 ADMIN NOTES INBOX
-// ══════════════════════════════════════════════
 function updateNotesBadge(){
-  const unread=allNotes.filter(n=>!n.read).length;
-  const badge=$('notesAdminBadge');
-  if(!badge)return;
-  if(unread>0){badge.textContent=unread;badge.style.display='inline-flex';}
-  else{badge.style.display='none';}
+  const unread = allNotes.filter(n => !n.read).length;
+  const badge  = $('notesAdminBadge');
+  if(!badge) return;
+  if(unread > 0){ badge.textContent = unread; badge.style.display = 'inline-flex'; }
+  else { badge.style.display = 'none'; }
 }
 
 async function markNotesRead(){
-  const batch=writeBatch(db);
-  allNotes.filter(n=>!n.read).forEach(n=>{
-    batch.update(doc(db,'notes',n.id),{read:true});
+  const batch = writeBatch(db);
+  allNotes.filter(n => !n.read).forEach(n => {
+    batch.update(doc(db,'notes',n.id),{ read: true });
   });
-  try{await batch.commit();}catch(e){}
+  try{ await batch.commit(); }catch(e){}
 }
 
-function filterAdminNotes(type,el){
-  currentNoteFilter=type;
-  document.querySelectorAll('.note-type-tab').forEach(t=>{t.className='note-type-tab';});
-  el.className='note-type-tab active-'+type;
+function filterAdminNotes(type, el){
+  currentNoteFilter = type;
+  document.querySelectorAll('.note-type-tab').forEach(t => { t.className = 'note-type-tab'; });
+  el.className = 'note-type-tab active-' + type;
   renderNotesInbox();
 }
 
 function renderNotesInbox(){
-  const box=$('notesInbox'); if(!box)return;
-  const total=allNotes.length;
-  const complaints=allNotes.filter(n=>n.noteType==='complaint').length;
-  const suggestions=allNotes.filter(n=>n.noteType==='suggestion').length;
-  const generals=allNotes.filter(n=>n.noteType==='general').length;
-  ['badgeAll','badgeComplaint','badgeSuggestion','badgeGeneral'].forEach((id,i)=>{
-    const el=$(id);if(el)el.textContent=[total,complaints,suggestions,generals][i];
+  const box = $('notesInbox'); if(!box) return;
+  const total       = allNotes.length;
+  const complaints  = allNotes.filter(n => n.noteType==='complaint').length;
+  const suggestions = allNotes.filter(n => n.noteType==='suggestion').length;
+  const generals    = allNotes.filter(n => n.noteType==='general').length;
+  ['badgeAll','badgeComplaint','badgeSuggestion','badgeGeneral'].forEach((id,i) => {
+    const el = $(id); if(el) el.textContent = [total,complaints,suggestions,generals][i];
   });
-  const typeOrder={complaint:0,suggestion:1,general:2};
-  let filtered=currentNoteFilter==='all'
-    ?[...allNotes].sort((a,b)=>(typeOrder[a.noteType]??3)-(typeOrder[b.noteType]??3))
-    :allNotes.filter(n=>n.noteType===currentNoteFilter);
+  const typeOrder = {complaint:0, suggestion:1, general:2};
+  let filtered = currentNoteFilter==='all'
+    ? [...allNotes].sort((a,b) => (typeOrder[a.noteType]??3) - (typeOrder[b.noteType]??3))
+    : allNotes.filter(n => n.noteType===currentNoteFilter);
   if(!filtered.length){
-    box.innerHTML='<div style="padding:40px;text-align:center;color:var(--ink3);font-size:.88rem">لا توجد ملاحظات في هذا التصنيف</div>';
+    box.innerHTML = '<div style="padding:40px;text-align:center;color:var(--ink3);font-size:.88rem">لا توجد ملاحظات في هذا التصنيف</div>';
     return;
   }
-  const typeConfig={
-    complaint:{label:'شكوى',badgeClass:'note-badge-complaint',bg:'#FFF8F8',border:'rgba(255,69,69,.18)'},
-    suggestion:{label:'مقترح',badgeClass:'note-badge-suggestion',bg:'#F8FFFB',border:'rgba(0,184,150,.18)'},
-    general:{label:'ملاحظة عامة',badgeClass:'note-badge-general',bg:'#F8FBFF',border:'rgba(50,148,255,.18)'}
+  const typeConfig = {
+    complaint: {label:'شكوى',      badgeClass:'note-badge-complaint', bg:'#FFF8F8', border:'rgba(255,69,69,.18)'},
+    suggestion:{label:'مقترح',     badgeClass:'note-badge-suggestion',bg:'#F8FFFB', border:'rgba(0,184,150,.18)'},
+    general:   {label:'ملاحظة عامة',badgeClass:'note-badge-general',  bg:'#F8FBFF', border:'rgba(50,148,255,.18)'}
   };
-  const gLabel={boys:'قسم البنين',girls:'قسم البنات','':'—'};
-  const container=document.createElement('div');
-  container.style.cssText='background:#fff;border-radius:var(--r2);border:1.5px solid #E8E8F2;overflow:hidden';
-  filtered.forEach(n=>{
-    const cfg=typeConfig[n.noteType]||typeConfig.general;
-    const isAnon=(n.name===null);
-    const item=document.createElement('div');
-    item.style.cssText=`padding:18px 20px;border-bottom:1px solid #F0F0F8;background:${n.resolved?'#F0FBF7':n.read?'#fff':cfg.bg};border-right:3px solid ${n.resolved?'rgba(0,184,150,.3)':n.read?'transparent':cfg.border}`;
-    item.innerHTML=`<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px">
+  const gLabel = {boys:'قسم البنين', girls:'قسم البنات', '':'—'};
+  const container = document.createElement('div');
+  container.style.cssText = 'background:#fff;border-radius:var(--r2);border:1.5px solid #E8E8F2;overflow:hidden';
+  filtered.forEach(n => {
+    const cfg   = typeConfig[n.noteType] || typeConfig.general;
+    const isAnon = (n.name === null);
+    const item   = document.createElement('div');
+    item.style.cssText = `padding:18px 20px;border-bottom:1px solid #F0F0F8;background:${n.resolved?'#F0FBF7':n.read?'#fff':cfg.bg};border-right:3px solid ${n.resolved?'rgba(0,184,150,.3)':n.read?'transparent':cfg.border}`;
+    item.innerHTML = `<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px">
       <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-        ${n.resolved?'<span style="font-size:.7rem;font-weight:800;color:var(--teal);background:#E6FBF5;border:1px solid rgba(0,184,150,.2);border-radius:5px;padding:2px 8px">✓ تم الحل</span>':(!n.read?'<span style="width:7px;height:7px;border-radius:50%;background:var(--coral);flex-shrink:0;display:inline-block;margin-top:2px"></span>':'')}
+        ${n.resolved
+          ? '<span style="font-size:.7rem;font-weight:800;color:var(--teal);background:#E6FBF5;border:1px solid rgba(0,184,150,.2);border-radius:5px;padding:2px 8px">✓ تم الحل</span>'
+          : (!n.read ? '<span style="width:7px;height:7px;border-radius:50%;background:var(--coral);flex-shrink:0;display:inline-block;margin-top:2px"></span>' : '')}
         <span class="ebadge ${esc(cfg.badgeClass)}" style="padding:4px 10px;border-radius:6px;font-size:.76rem;font-weight:800">${esc(cfg.label)}</span>
         <span style="font-size:.75rem;color:var(--ink3);background:var(--paper2);padding:2px 9px;border-radius:5px;font-weight:600">${esc(n.context||'عام')}</span>
-        ${isAnon?'<span style="font-size:.72rem;background:#FFF1F1;color:var(--coral);border:1px solid rgba(255,69,69,.2);border-radius:5px;padding:2px 8px;font-weight:700">🔒 مجهول الهوية</span>':`<span style="font-size:.72rem;background:var(--paper2);color:var(--ink3);border-radius:5px;padding:2px 8px;font-weight:600">${esc(n.name||'—')}</span>`}
-        ${(!isAnon&&n.gender)?`<span style="font-size:.72rem;background:var(--paper2);color:var(--ink3);border-radius:5px;padding:2px 8px;font-weight:600">${esc(gLabel[n.gender]||'')}</span>`:''}
+        ${isAnon
+          ? '<span style="font-size:.72rem;background:#FFF1F1;color:var(--coral);border:1px solid rgba(255,69,69,.2);border-radius:5px;padding:2px 8px;font-weight:700">🔒 مجهول الهوية</span>'
+          : `<span style="font-size:.72rem;background:var(--paper2);color:var(--ink3);border-radius:5px;padding:2px 8px;font-weight:600">${esc(n.name||'—')}</span>`}
+        ${(!isAnon && n.gender) ? `<span style="font-size:.72rem;background:var(--paper2);color:var(--ink3);border-radius:5px;padding:2px 8px;font-weight:600">${esc(gLabel[n.gender]||'')}</span>` : ''}
       </div>
       <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
         <span style="font-size:.74rem;color:var(--ink3)">${esc(fmtTs(n.createdAt))}</span>
         ${!n.resolved
-          ?`<button class="btn btn-xs resolve-btn" data-id="${esc(n.id)}" style="background:#E6FBF5;color:var(--teal);border:1.5px solid rgba(0,184,150,.25);font-size:.75rem;padding:5px 10px">✓ تم التعامل</button>`
-          :`<button class="btn btn-xs unresolve-btn" data-id="${esc(n.id)}" style="background:#F0F0F8;color:var(--ink3);border:1.5px solid #DCDCEC;font-size:.75rem;padding:5px 10px">إعادة فتح</button>`}
+          ? `<button class="btn btn-xs resolve-btn" data-id="${esc(n.id)}" style="background:#E6FBF5;color:var(--teal);border:1.5px solid rgba(0,184,150,.25);font-size:.75rem;padding:5px 10px">✓ تم التعامل</button>`
+          : `<button class="btn btn-xs unresolve-btn" data-id="${esc(n.id)}" style="background:#F0F0F8;color:var(--ink3);border:1.5px solid #DCDCEC;font-size:.75rem;padding:5px 10px">إعادة فتح</button>`}
         <button class="btn btn-d btn-xs del-note-btn" data-id="${esc(n.id)}">حذف</button>
       </div>
     </div>
     <div style="font-size:.87rem;color:var(--ink2);line-height:1.75">${esc(n.note)}</div>`;
-    item.querySelectorAll('.resolve-btn').forEach(b=>b.addEventListener('click',()=>resolveNote(b.dataset.id,true)));
-    item.querySelectorAll('.unresolve-btn').forEach(b=>b.addEventListener('click',()=>resolveNote(b.dataset.id,false)));
-    item.querySelectorAll('.del-note-btn').forEach(b=>b.addEventListener('click',()=>deleteNote(b.dataset.id)));
+    item.querySelectorAll('.resolve-btn').forEach(b   => b.addEventListener('click', () => resolveNote(b.dataset.id, true)));
+    item.querySelectorAll('.unresolve-btn').forEach(b => b.addEventListener('click', () => resolveNote(b.dataset.id, false)));
+    item.querySelectorAll('.del-note-btn').forEach(b  => b.addEventListener('click', () => deleteNote(b.dataset.id)));
     container.appendChild(item);
   });
-  box.innerHTML='';
+  box.innerHTML = '';
   box.appendChild(container);
 }
 
-async function resolveNote(id,resolved){
+async function resolveNote(id, resolved){
   try{
-    await updateDoc(doc(db,'notes',id),{resolved,read:true});
-    toast(resolved?'تم التعامل مع المشكلة':'تم إعادة فتح الملاحظة','ok');
-  }catch(e){toast('خطأ','err');}
+    await updateDoc(doc(db,'notes',id),{ resolved, read: true });
+    toast(resolved ? 'تم التعامل مع المشكلة' : 'تم إعادة فتح الملاحظة','ok');
+  }catch(e){ toast('خطأ','err'); }
 }
 async function deleteNote(id){
-  try{await deleteDoc(doc(db,'notes',id));toast('تم الحذف','err');}
-  catch(e){toast('خطأ','err');}
+  try{ await deleteDoc(doc(db,'notes',id)); toast('تم الحذف','err'); }
+  catch(e){ toast('خطأ','err'); }
 }
 async function clearAllNotes(){
-  if(!allNotes.length)return;
-  if(!confirm('هل أنت متأكد من مسح الملاحظات؟'))return;
-  const toDelete=currentNoteFilter==='all'?allNotes:allNotes.filter(n=>n.noteType===currentNoteFilter);
-  const batch=writeBatch(db);
-  toDelete.forEach(n=>batch.delete(doc(db,'notes',n.id)));
-  try{await batch.commit();toast('تم المسح','err');}
-  catch(e){toast('خطأ','err');}
+  if(!allNotes.length) return;
+  if(!confirm('هل أنت متأكد من مسح الملاحظات؟')) return;
+  const toDelete = currentNoteFilter==='all'
+    ? allNotes
+    : allNotes.filter(n => n.noteType===currentNoteFilter);
+  const batch = writeBatch(db);
+  toDelete.forEach(n => batch.delete(doc(db,'notes',n.id)));
+  try{ await batch.commit(); toast('تم المسح','err'); }
+  catch(e){ toast('خطأ','err'); }
 }
 
 // ══════════════════════════════════════════════
-//  ✏️ تحديث الملف الشخصي
+//  ✏️ الملف الشخصي
 // ══════════════════════════════════════════════
 async function saveProfile(){
-  const isB=currentProfile.gender==='boys';
-  const fn=sanitizeText(isB?$('bPFN').value.trim():$('gPFN').value.trim());
-  const ln=sanitizeText(isB?$('bPLN').value.trim():$('gPLN').value.trim());
-  if(!fn||!ln){toast('يرجى ملء الاسم','err');return;}
+  const isB = currentProfile.gender === 'boys';
+  const fn  = sanitizeText(isB ? $('bPFN').value.trim() : $('gPFN').value.trim());
+  const ln  = sanitizeText(isB ? $('bPLN').value.trim() : $('gPLN').value.trim());
+  if(!fn || !ln){ toast('يرجى ملء الاسم','err'); return; }
   try{
-    await updateDoc(doc(db,'users',currentUser.uid),{fn,ln});
-    currentProfile.fn=fn; currentProfile.ln=ln;
+    await updateDoc(doc(db,'users',currentUser.uid),{ fn, ln });
+    currentProfile.fn = fn; currentProfile.ln = ln;
     updateNav();
-    if(isB)rBoysD(); else rGirlsD();
+    if(isB) rBoysD(); else rGirlsD();
     toast('تم الحفظ','ok');
-  }catch(e){toast('خطأ: '+e.message,'err');}
+  }catch(e){ toast('خطأ: '+e.message,'err'); }
 }
 
 // ══════════════════════════════════════════════
-//  🛠️ دوال مساعدة أمنية
+//  🛠️ دوال مساعدة
 // ══════════════════════════════════════════════
 function isValidEmail(e){
-  // تحقق بسيط وآمن
   return /^[^\s@]{1,64}@[^\s@]{1,253}\.[^\s@]{2,}$/.test(e);
 }
 function sanitizeText(str){
-  if(!str)return '';
-  // إزالة الـ tags ومحارف الـ control
+  if(!str) return '';
   return str.replace(/<[^>]*>/g,'').replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g,'').trim().slice(0,2000);
 }
 function sanitizeUrl(url){
   try{
-    const u=new URL(url);
-    // فقط http و https مسموح بهما
-    if(u.protocol!=='http:'&&u.protocol!=='https:') return '';
+    const u = new URL(url);
+    if(u.protocol!=='http:' && u.protocol!=='https:') return '';
     return u.toString();
-  }catch{return '';}
+  }catch{ return ''; }
 }
 function fmtD(d){
-  if(!d)return'—';
+  if(!d) return '—';
   return new Date(d+'T00:00:00').toLocaleDateString('ar-SA',{year:'numeric',month:'long',day:'numeric'});
 }
 function fmtTs(ts){
-  if(!ts)return'—';
-  const date=ts.toDate?ts.toDate():new Date(ts);
+  if(!ts) return '—';
+  const date = ts.toDate ? ts.toDate() : new Date(ts);
   return date.toLocaleDateString('ar-SA',{year:'numeric',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
 }
 function togglePriceField(chk){
-  const wrap=$('priceFieldWrap');
-  chk.checked?wrap.classList.remove('show'):wrap.classList.add('show');
+  const wrap = $('priceFieldWrap');
+  chk.checked ? wrap.classList.remove('show') : wrap.classList.add('show');
 }
 
 // ══════════════════════════════════════════════
-//  🌐 تصدير الدوال للـ HTML
+//  🌐 تصدير الدوال
 // ══════════════════════════════════════════════
-window.pickRole=pickRole; window.doLogin=doLogin; window.doReg=doReg;
-window.logout=logout; window.goHome=goHome;
-window.showPg=showPg; window.openM=openM; window.closeM=closeM;
-window.sBTab=sBTab; window.sGTab=sGTab; window.sATab=sATab;
-window.searchBoys=searchBoys; window.searchGirls=searchGirls;
-window.showDet=showDet; window.regEv=regEv; window.cancelR=cancelR;
-window.goToRegPage=goToRegPage; window.confirmReg=confirmReg;
-window.goBackFromReg=goBackFromReg; window.goToEvents=goToEvents;
-window.addEv=addEv; window.delEv=delEv; window.viewRegs=viewRegs;
-window.addCat=addCat; window.delCat=delCat;
-window.openNotes=openNotes; window.submitNote=submitNote;
-window.onNoteTypeChange=onNoteTypeChange;
-window.filterAdminNotes=filterAdminNotes; window.clearAllNotes=clearAllNotes;
-window.resolveNote=resolveNote; window.deleteNote=deleteNote;
-window.slideMove=slideMove; window.slideTo=slideTo;
-window.saveProfile=saveProfile; window.togglePriceField=togglePriceField;
-window.renderUsersList=renderUsersList;
-window.markNotesRead=markNotesRead;
+window.pickRole       = pickRole;
+window.doLogin        = doLogin;
+window.doReg          = doReg;
+window.logout         = logout;
+window.goHome         = goHome;
+window.showPg         = showPg;
+window.openM          = openM;
+window.closeM         = closeM;
+window.sBTab          = sBTab;
+window.sGTab          = sGTab;
+window.sATab          = sATab;
+window.searchBoys     = searchBoys;
+window.searchGirls    = searchGirls;
+window.showDet        = showDet;
+window.cancelR        = cancelR;
+window.goToRegPage    = goToRegPage;
+window.confirmReg     = confirmReg;
+window.goBackFromReg  = goBackFromReg;
+window.goToEvents     = goToEvents;
+window.addEv          = addEv;
+window.delEv          = delEv;
+window.viewRegs       = viewRegs;
+window.addCat         = addCat;
+window.delCat         = delCat;
+window.openNotes      = openNotes;
+window.submitNote     = submitNote;
+window.onNoteTypeChange = onNoteTypeChange;
+window.filterAdminNotes = filterAdminNotes;
+window.clearAllNotes  = clearAllNotes;
+window.resolveNote    = resolveNote;
+window.deleteNote     = deleteNote;
+window.saveProfile    = saveProfile;
+window.togglePriceField = togglePriceField;
+window.renderUsersList  = renderUsersList;
+window.markNotesRead    = markNotesRead;
+window.slideTo          = slideTo;
 </script>
 </body>
 </html>
