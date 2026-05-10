@@ -124,11 +124,12 @@ DASHBOARDS
   border-radius:var(--r2);
   position:relative;
 }
-.slider-track{
-  display:flex;
-  height:300px;
-  transition:transform .65s cubic-bezier(.4,0,.2,1);
-  will-change:transform;
+.slider-track {
+  display: flex;
+  height: 300px;
+  transition: transform .65s cubic-bezier(.4,0,.2,1);
+  will-change: transform;
+  gap: 16px; /* ← المسافة بين الشرائح */
 }
 .slide{
   min-width:100%;
@@ -408,7 +409,7 @@ transition:all .18s;flex-shrink:0;
 <nav id="nav" style="display:none">
   <div class="logo" onclick="goHome()">
     <div class="logo-mark">
-      <img src="file:///Users/why/Downloads/logo.jpg" alt="Logo" style="width:48px;height:48px;object-fit:cover;border-radius:8px;">
+      <img src="images/logo.jpg" alt="Logo" style="width:48px;height:48px;object-fit:cover;border-radius:8px;">
     </div>
     <div class="logo-text">
       مدارس الموهوبين التقنية
@@ -426,9 +427,9 @@ transition:all .18s;flex-shrink:0;
       <div class="auth-orb auth-orb-3"></div><div class="auth-orb auth-orb-4"></div>
       <div style="position:relative;z-index:1">
         <div style="display:flex;align-items:center;gap:11px;margin-bottom:64px">
-          <div style="width:40px;height:40px;background:rgba(255,255,255,.2);border-radius:10px;border:1.5px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L4 7v5c0 5.25 3.5 10.15 8 11.35C16.5 22.15 20 17.25 20 12V7L12 3z"/></svg>
-          </div>
+          <div style="width:40px;height:40px;border-radius:10px;overflow:hidden">
+  <img src="images/logo.jpg" alt="Logo" style="width:100%;height:100%;object-fit:cover;">
+    </div>
           <div style="color:#fff;font-weight:900;font-size:1rem;line-height:1.2">مدارس الموهوبين التقنية<span style="display:block;font-size:.66rem;opacity:.7;font-weight:600;margin-top:1px">منصة الفعاليات</span></div>
         </div>
         <div style="color:#fff;font-size:2.2rem;font-weight:900;line-height:1.2;margin-bottom:16px">مرحباً بك في<br>منصة الفعاليات</div>
@@ -1160,12 +1161,14 @@ function updateNav(){
 // SVG أيقونات للـ Slider Empty State
 const SVG_CALENDAR = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M8 2v4M16 2v4M3 10h18"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>`;
 
-function buildSlider(gender){
-  const containerId = gender==='boys' ? 'bSliderContainer' : 'gSliderContainer';
-  const container = $(containerId);
-  if(!container) return;
 
-  if(sliderState[gender].timer){
+function buildSlider(gender) {
+  const containerId = gender === 'boys' ? 'bSliderContainer' : 'gSliderContainer';
+  const container = $(containerId);
+  if (!container) return;
+
+  // ✅ إيقاف أي Timer سابق أولاً
+  if (sliderState[gender].timer) {
     clearInterval(sliderState[gender].timer);
     sliderState[gender].timer = null;
   }
@@ -1174,7 +1177,7 @@ function buildSlider(gender){
     .filter(e => e.gender === gender || e.gender === 'both')
     .slice(0, 6);
 
-  if(!evs.length){
+  if (!evs.length) {
     container.innerHTML = `
       <div class="slider-empty">
         <div class="slider-empty-icon">${SVG_CALENDAR}</div>
@@ -1186,20 +1189,20 @@ function buildSlider(gender){
 
   const isGirls = (gender === 'girls');
   sliderState[gender].total = evs.length;
-  sliderState[gender].idx   = 0;
+  sliderState[gender].idx = 0;
 
   const slidesHtml = evs.map((ev, i) => {
     const regCount = ev.regCount || 0;
-    const isFull   = ev.seats > 0 && regCount >= ev.seats;
-    const isBoth   = ev.gender === 'both';
-    const bgClass  = isBoth ? 'both' : (isGirls ? 'girls' : '');
+    const isFull = ev.seats > 0 && regCount >= ev.seats;
+    const isBoth = ev.gender === 'both';
+    const bgClass = isBoth ? 'both' : (isGirls ? 'girls' : '');
     const btnClass = isBoth ? 'both-btn' : (isGirls ? 'girls-btn' : '');
     const seatsLabel = ev.seats > 0
       ? (isFull ? 'اكتملت المقاعد' : `${ev.seats - regCount} مقعد متاح`)
       : 'مقاعد غير محدودة';
     const regLabel = ev.rr ? (isFull ? 'اكتمل التسجيل' : 'سجّل الآن') : 'انضم للفعالية';
 
-    return `<div class="slide" aria-label="شريحة ${i+1} من ${evs.length}">
+    return `<div class="slide" aria-label="شريحة ${i + 1} من ${evs.length}">
       <div class="slide-bg ${esc(bgClass)}"></div>
       <div class="slide-orb slide-orb-1"></div>
       <div class="slide-orb slide-orb-2"></div>
@@ -1231,12 +1234,12 @@ function buildSlider(gender){
 
   const dotsHtml = evs.map((_, i) => {
     const dotClass = isGirls ? 'girls-dot' : '';
-    return `<button class="sdot-btn ${dotClass} ${i===0?'active':''}" data-idx="${i}" aria-label="انتقل إلى الشريحة ${i+1}"></button>`;
+    return `<button class="sdot-btn ${dotClass} ${i === 0 ? 'active' : ''}" data-idx="${i}" aria-label="انتقل إلى الشريحة ${i + 1}"></button>`;
   }).join('');
 
   container.innerHTML = `
     <div class="slider-wrap" style="margin-bottom:8px">
-      <div class="slider-viewport">
+      <div class="slider-viewport" id="slViewport_${gender}">
         <div class="slider-track" id="slTrack_${gender}">${slidesHtml}</div>
       </div>
       <button class="slider-arrow slider-arr-l" id="slArrL_${gender}" aria-label="الشريحة السابقة">
@@ -1248,8 +1251,11 @@ function buildSlider(gender){
     </div>
     <div class="slider-dots" id="slDots_${gender}" style="margin-bottom:30px">${dotsHtml}</div>`;
 
-  $(`slArrL_${gender}`).addEventListener('click', () => slideTo(gender, (sliderState[gender].idx + 1) % sliderState[gender].total));
-  $(`slArrR_${gender}`).addEventListener('click', () => slideTo(gender, (sliderState[gender].idx - 1 + sliderState[gender].total) % sliderState[gender].total));
+  // ✅ ربط الأزرار
+  $(`slArrL_${gender}`).addEventListener('click', () =>
+    slideTo(gender, (sliderState[gender].idx + 1) % sliderState[gender].total));
+  $(`slArrR_${gender}`).addEventListener('click', () =>
+    slideTo(gender, (sliderState[gender].idx - 1 + sliderState[gender].total) % sliderState[gender].total));
 
   $(`slDots_${gender}`).querySelectorAll('.sdot-btn').forEach(btn => {
     btn.addEventListener('click', () => slideTo(gender, parseInt(btn.dataset.idx)));
@@ -1259,31 +1265,52 @@ function buildSlider(gender){
     btn.addEventListener('click', () => showDet(btn.dataset.evid));
   });
 
-  slideTo(gender, 0);
-  sliderState[gender].timer = setInterval(() => {
-    const s = sliderState[gender];
-    slideTo(gender, (s.idx + 1) % s.total);
-  }, 5000);
+  // ✅ الحل الرئيسي: انتظر رسم DOM أولاً ثم اذهب للشريحة الأولى
+  requestAnimationFrame(() => {
+    slideTo(gender, 0);
+
+    // ✅ ResizeObserver لإعادة الحساب عند تغيير حجم النافذة
+    const viewport = $(`slViewport_${gender}`);
+    if (viewport) {
+      const ro = new ResizeObserver(() => {
+        slideTo(gender, sliderState[gender].idx);
+      });
+      ro.observe(viewport);
+      sliderState[gender].resizeObserver = ro;
+    }
+
+    // ✅ التمرير التلقائي بعد التأكد من الرسم
+    sliderState[gender].timer = setInterval(() => {
+      const s = sliderState[gender];
+      slideTo(gender, (s.idx + 1) % s.total);
+    }, 5000);
+  });
 }
 
-function slideTo(gender, idx){
+function slideTo(gender, idx) {
   const s = sliderState[gender];
   const total = s.total;
-  if(total === 0) return;
+  if (total === 0) return;
   idx = ((idx % total) + total) % total;
   s.idx = idx;
+
+  const viewport = $(`slViewport_${gender}`);
   const track = $(`slTrack_${gender}`);
-  if(track){
-    const firstSlide = track.querySelector('.slide');
-    const slideWidth = firstSlide ? firstSlide.getBoundingClientRect().width : track.clientWidth;
-    track.style.transform = `translateX(${idx * -slideWidth}px)`;
-    track.style.willChange = 'transform';
+  if (track && viewport) {
+    const slideWidth = viewport.clientWidth;
+    const gap = 16; // ← نفس قيمة gap في CSS
+    if (slideWidth > 0) {
+      track.style.transform = `translateX(${idx * (slideWidth + gap)}px)`;
+    }
   }
+
   const dotsWrap = $(`slDots_${gender}`);
-  if(dotsWrap){
-    dotsWrap.querySelectorAll('.sdot-btn').forEach((d, i) => d.classList.toggle('active', i === idx));
+  if (dotsWrap) {
+    dotsWrap.querySelectorAll('.sdot-btn').forEach((d, i) =>
+      d.classList.toggle('active', i === idx));
   }
 }
+
 
 // ══════════════════════════════════════════════
 //  📋 بطاقة الفعالية
