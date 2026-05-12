@@ -1010,7 +1010,7 @@ onAuthStateChanged(auth, async (firebaseUser) => {
     updateNav();
     loadEvents();
     loadCategories();
-    if(currentProfile.role==='admin' || currentProfile.role==='coordinator') listenNotes();
+    if(currentProfile.role==='owner' || currentProfile.role==='admin' || currentProfile.role==='coordinator') listenNotes();
     routeAfterLogin();
   }catch(e){
     console.error(e);
